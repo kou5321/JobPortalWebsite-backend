@@ -11,5 +11,5 @@ Lombok
 Spring Data JPA
 
 # Resources
-This project has built based on Telusko's video: https://www.youtube.com/watch?v=kYiLzIiHVY8&t=3044s
+This project has built based on Telusko's video: https://www.youtube.com/watch?v=kYiLzIiHVY8&t=3044s \
 Here is his code base: https://github.com/navinreddy20/SpringMongoDB
