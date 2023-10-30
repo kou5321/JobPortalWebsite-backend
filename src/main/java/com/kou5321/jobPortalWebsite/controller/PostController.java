@@ -5,9 +5,7 @@ import com.kou5321.jobPortalWebsite.model.Post;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,5 +25,10 @@ public class PostController {
     @GetMapping("/getAllPosts")
     public List<Post> getAllPosts() {
         return repo.findAll();
+    }
+
+    @PostMapping("/post")
+    public Post addPost(@RequestBody Post post) {
+        return repo.save(post);
     }
 }
