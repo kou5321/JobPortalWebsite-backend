@@ -1,4 +1,4 @@
-package com.kou5321.jobPortalWebsite;
+package com.kou5321.jobPortalWebsite.controller;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,4 +15,5 @@ public class PostController {
     public void redirect(HttpServletResponse response) throws IOException {
         response.sendRedirect("/swagger-ui.html");
     }
+
 }
