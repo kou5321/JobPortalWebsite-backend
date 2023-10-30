@@ -1,36 +1,21 @@
 package com.kou5321.jobPortalWebsite.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Arrays;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Document(collection = "JobPost")
 public class Post {
     private String profile;
     private String desc;
     private int exp;
     private String[] techs;
-
-    public Post() {
-    }
-
-    public void setProfile(String profile) {
-        this.profile = profile;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
-    public void setExp(int exp) {
-        this.exp = exp;
-    }
-
-    public void setTechs(String[] techs) {
-        this.techs = techs;
-    }
 
     @Override
     public String toString() {

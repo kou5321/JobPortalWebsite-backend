@@ -2,6 +2,7 @@ package com.kou5321.jobPortalWebsite.controller;
 
 import com.kou5321.jobPortalWebsite.repository.PostRepository;
 import com.kou5321.jobPortalWebsite.model.Post;
+import com.kou5321.jobPortalWebsite.repository.SearchRepository;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,10 @@ import java.util.List;
 public class PostController {
 
     @Autowired
-    PostRepository repo;
+    PostRepository postRepository;
+
+    @Autowired
+    SearchRepository searchRepository;
 
     @RequestMapping("/")
     @Hidden
@@ -24,11 +28,16 @@ public class PostController {
 
     @GetMapping("/getAllPosts")
     public List<Post> getAllPosts() {
-        return repo.findAll();
+        return postRepository.findAll();
     }
 
     @PostMapping("/post")
     public Post addPost(@RequestBody Post post) {
-        return repo.save(post);
+        return postRepository.save(post);
+    }
+
+    @GetMapping("/post/{text}")
+    public List<Post> searchPost(@PathVariable String text) {
+        return searchRepository.findByText(text);
     }
 }
