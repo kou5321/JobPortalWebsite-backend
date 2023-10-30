@@ -36,7 +36,7 @@ public class PostController {
         return postRepository.save(post);
     }
 
-    @GetMapping("/post/{text}")
+    @GetMapping("/post/search/text={text}")
     public List<Post> searchPost(@PathVariable String text) {
         return searchRepository.findByText(text);
     }

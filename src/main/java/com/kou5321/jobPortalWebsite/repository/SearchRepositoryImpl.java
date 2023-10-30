@@ -31,20 +31,21 @@ public class SearchRepositoryImpl implements SearchRepository {
         MongoDatabase database = client.getDatabase("jobListing");
         MongoCollection<Document> collection = database.getCollection("JobPost");
 
-        AggregateIterable<Document> result = collection
-                .aggregate(Arrays.asList(new Document("$search",
+        // Use aggregation to perform a text search on the collection
+        // 1, searching in the "techs", "desc", and "profile" fields
+        // 2. It limits the output to the first 5 documents
+        AggregateIterable<Document> result = collection.aggregate(
+                Arrays.asList(
+                        new Document("$search",
                                 new Document("text",
                                         new Document("query", text)
                                                 .append("path", Arrays.asList("techs", "desc", "profile")))),
-//                        new Document("$sort",
-//                                new Document("exp", 1L)),
-                        new Document("$limit", 5L)));
+                        new Document("$limit", 5L)
+                ));
 
         result.forEach(doc -> posts.add(converter.read(Post.class, doc)));
-        // test if it is being executed
-        log.info("Test successful!");
-        Post test = new Post("testName", "testXXX", 1, new String[] {"hhh"});
-        posts.add(test);
+
+        log.info("Search for text '{}' returned {} results.", text, posts.size());
         return posts;
     }
 }
