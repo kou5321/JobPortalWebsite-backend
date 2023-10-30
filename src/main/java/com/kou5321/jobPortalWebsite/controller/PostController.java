@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-
 public class PostController {
 
     @Autowired
@@ -25,7 +24,7 @@ public class PostController {
         response.sendRedirect("/swagger-ui.html");
     }
 
-    @GetMapping("/allPosts")
+    @GetMapping("/getAllPosts")
     public List<Post> getAllPosts() {
         return repo.findAll();
     }

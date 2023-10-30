@@ -1,42 +1,31 @@
 package com.kou5321.jobPortalWebsite.model;
 
+import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Arrays;
 
+@Data
+@Document(collection = "JobPost")
 public class Post {
     private String profile;
     private String desc;
     private int exp;
-    private String techs[];
+    private String[] techs;
 
     public Post() {
-    }
-
-    public String getProfile() {
-        return profile;
     }
 
     public void setProfile(String profile) {
         this.profile = profile;
     }
 
-    public String getDesc() {
-        return desc;
-    }
-
     public void setDesc(String desc) {
         this.desc = desc;
     }
 
-    public int getExp() {
-        return exp;
-    }
-
     public void setExp(int exp) {
         this.exp = exp;
-    }
-
-    public String[] getTechs() {
-        return techs;
     }
 
     public void setTechs(String[] techs) {
