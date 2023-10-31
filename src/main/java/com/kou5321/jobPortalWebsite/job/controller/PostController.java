@@ -1,8 +1,8 @@
-package com.kou5321.jobPortalWebsite.controller;
+package com.kou5321.jobPortalWebsite.job.controller;
 
-import com.kou5321.jobPortalWebsite.repository.PostRepository;
-import com.kou5321.jobPortalWebsite.model.Post;
-import com.kou5321.jobPortalWebsite.repository.SearchRepository;
+import com.kou5321.jobPortalWebsite.job.model.Post;
+import com.kou5321.jobPortalWebsite.job.repository.PostRepository;
+import com.kou5321.jobPortalWebsite.job.repository.SearchRepository;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
