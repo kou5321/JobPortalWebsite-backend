@@ -31,7 +31,7 @@ public class UserController {
 //    }
 
     @PostMapping("/api/users")
-    public void signUp(@RequestBody SignUpRequest request, HttpServletRequest httpServletRequest) {
+    public void signUp(@RequestBody SignUpRequest request) {
         userService.signUp(request);
     }
 }

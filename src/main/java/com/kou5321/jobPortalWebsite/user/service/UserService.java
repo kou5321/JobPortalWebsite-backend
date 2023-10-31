@@ -5,6 +5,7 @@ import com.kou5321.jobPortalWebsite.user.entity.User;
 import com.kou5321.jobPortalWebsite.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ComponentScan
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public User signUp(SignUpRequest request) {
@@ -27,12 +29,11 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
-    // TODO: encrypt the password
     private User createNewUser(SignUpRequest request) {
         return User.builder()
                 .email(request.email())
                 .username(request.username())
-                .password(request.password())
+                .password(passwordEncoder.encode(request.password()))
                 .build();
     }
 }
