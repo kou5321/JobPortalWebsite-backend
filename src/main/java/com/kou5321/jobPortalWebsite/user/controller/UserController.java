@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
+import com.kou5321.jobPortalWebsite.user.dto.LoginRequest;
 
 import java.util.Map;
 
