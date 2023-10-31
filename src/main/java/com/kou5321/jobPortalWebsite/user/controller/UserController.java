@@ -20,13 +20,18 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("/api/users")
-    public ModelAndView signUp(@RequestBody SignUpRequest request, HttpServletRequest httpServletRequest) {
-        userService.signUp(request);
+//    @PostMapping("/api/users")
+//    public ModelAndView signUp(@RequestBody SignUpRequest request, HttpServletRequest httpServletRequest) {
+//        userService.signUp(request);
+//
+//        // Redirect to login API to automatically login when signup is complete
+//        LoginRequest loginRequest = new LoginRequest(request.email(), request.password());
+//        httpServletRequest.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
+//        return new ModelAndView("redirect:/api/users/login", "user", Map.of("user", loginRequest));
+//    }
 
-        // Redirect to login API to automatically login when signup is complete
-        LoginRequest loginRequest = new LoginRequest(request.email(), request.password());
-        httpServletRequest.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
-        return new @EnableAutoConfiguration("redirect:/api/users/login", "user", Map.of("user", loginRequest));
+    @PostMapping("/api/users")
+    public void signUp(@RequestBody SignUpRequest request, HttpServletRequest httpServletRequest) {
+        userService.signUp(request);
     }
 }

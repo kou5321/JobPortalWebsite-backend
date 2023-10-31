@@ -14,10 +14,8 @@ import java.util.List;
 @RestController
 public class PostController {
 
-    @Autowired
     PostRepository postRepository;
 
-    @Autowired
     SearchRepository searchRepository;
 
     @RequestMapping("/")
