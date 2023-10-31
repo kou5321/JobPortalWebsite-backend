@@ -4,6 +4,7 @@ import com.kou5321.jobPortalWebsite.user.dto.SignUpRequest;
 import com.kou5321.jobPortalWebsite.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
