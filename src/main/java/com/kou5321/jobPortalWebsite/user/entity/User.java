@@ -30,7 +30,7 @@ public class User {
 
     @Builder.Default
     @Column(length = 500, nullable = false)
-    private String bio = "";
+    private String bio = "This one is too lazy and haven't leave anything yet...";
 
     private String image;
 
