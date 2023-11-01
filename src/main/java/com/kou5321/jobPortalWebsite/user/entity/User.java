@@ -32,11 +32,10 @@ public class User {
     @Column(length = 500, nullable = false)
     private String bio = "This one is too lazy and haven't leave anything yet...";
 
-    private String image;
+    private String image = "https://img.moegirl.org.cn/common/b/b7/Transparent_Akkarin.jpg";
 
     @Override
-    // TODO: remove the toString in the future
-    // The password has already been encoded
+    // TODO: remove the toString in the future because of the password
     public String toString() {
         return "User{" +
                 "id=" + id +
