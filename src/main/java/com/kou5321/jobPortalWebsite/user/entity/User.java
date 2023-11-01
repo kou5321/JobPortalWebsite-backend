@@ -11,7 +11,7 @@ import java.util.UUID;
 @Builder
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
     @Id
@@ -33,5 +33,19 @@ public class User {
     private String bio = "";
 
     private String image;
+
+    @Override
+    // TODO: remove the toString in the future
+    // The password has already been encoded
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", username='" + username + '\'' +
+                ", bio='" + bio + '\'' +
+                ", image='" + image + '\'' +
+                '}';
+    }
 
 }

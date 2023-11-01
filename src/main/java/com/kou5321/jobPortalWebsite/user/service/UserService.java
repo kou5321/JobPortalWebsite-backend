@@ -1,5 +1,6 @@
 package com.kou5321.jobPortalWebsite.user.service;
 
+import com.kou5321.jobPortalWebsite.user.dto.LoginRequest;
 import com.kou5321.jobPortalWebsite.user.dto.SignUpRequest;
 import com.kou5321.jobPortalWebsite.user.entity.User;
 import com.kou5321.jobPortalWebsite.user.repository.UserRepository;
@@ -27,6 +28,14 @@ public class UserService {
 
         User newUser = this.createNewUser(request);
         return userRepository.save(newUser);
+    }
+
+    @Transactional(readOnly = true)
+    public User login(LoginRequest request) {
+        return userRepository
+                .findByUsername(request.username())
+                .filter(user -> passwordEncoder.matches(request.password(), user.getPassword()))
+                .orElseThrow(() -> new IllegalArgumentException("Invalid name or password."));
     }
 
     private User createNewUser(SignUpRequest request) {
