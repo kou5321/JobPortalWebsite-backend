@@ -31,7 +31,7 @@ public class User {
     @Builder.Default
     @Column(length = 500, nullable = false)
     private String bio = "This one is too lazy and haven't leave anything yet...";
-
+    // TODO: The Image currently doesn't get stored
     private String image = "https://img.moegirl.org.cn/common/b/b7/Transparent_Akkarin.jpg";
 
     @Override
