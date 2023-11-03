@@ -1,6 +1,6 @@
-package com.kou5321.jobPortalWebsite.repository;
+package com.kou5321.jobPortalWebsite.job.repository;
 
-import com.kou5321.jobPortalWebsite.model.Post;
+import com.kou5321.jobPortalWebsite.job.model.Post;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;

@@ -1,4 +1,4 @@
-package com.kou5321.jobPortalWebsite.model;
+package com.kou5321.jobPortalWebsite.job.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
