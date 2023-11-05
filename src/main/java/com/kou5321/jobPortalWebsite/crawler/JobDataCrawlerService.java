@@ -5,6 +5,8 @@ import com.kou5321.jobPortalWebsite.job.repository.JobPostingRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import org.jsoup.nodes.Document;
@@ -14,12 +16,15 @@ import java.io.IOException;
 
 @Slf4j
 @Service
+@EnableScheduling
 public class JobDataCrawlerService {
     private static final String GITHUB_URL = "https://raw.githubusercontent.com/ReaVNaiL/New-Grad-2024/main/README.md";
 
     @Autowired
     private JobPostingRepository jobPostingRepository;
 
+    // executed every day at 1 AM
+    @Scheduled(cron = "0 0 1 * * ?")
     public void crawlGitHubJobPostings() {
         try {
             log.info("Deleting all existing job postings");
