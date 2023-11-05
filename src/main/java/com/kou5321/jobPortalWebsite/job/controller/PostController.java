@@ -1,7 +1,7 @@
 package com.kou5321.jobPortalWebsite.job.controller;
 
-import com.kou5321.jobPortalWebsite.job.model.Post;
 import com.kou5321.jobPortalWebsite.job.repository.PostRepository;
+import com.kou5321.jobPortalWebsite.job.model.Post;
 import com.kou5321.jobPortalWebsite.job.repository.SearchRepository;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,8 +14,10 @@ import java.util.List;
 @RestController
 public class PostController {
 
+    @Autowired
     PostRepository postRepository;
 
+    @Autowired
     SearchRepository searchRepository;
 
     @RequestMapping("/")
