@@ -16,7 +16,7 @@ public class JobPosting {
     @TextIndexed
     private String jobTitle;
     @TextIndexed
-    private String exp;
+    private String exp = "?";
     private String sponsor;
     private String link;
 
