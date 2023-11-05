@@ -23,7 +23,7 @@ public class JobDataCrawlerService {
     @Autowired
     private JobPostingRepository jobPostingRepository;
 
-    // executed every day at 1 AM
+    // executed every 6 hours
     @Scheduled(cron = "0 0 1 * * ?")
     public void crawlGitHubJobPostings() {
         try {
