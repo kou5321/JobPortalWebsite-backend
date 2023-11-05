@@ -1,7 +1,10 @@
 /Users/ykou/Documents/AMESFinalProj/src/main/java/com/kou5321/jobPortalWebsite/user/entity/User.java
 /Users/ykou/Documents/AMESFinalProj/src/main/java/com/kou5321/jobPortalWebsite/config/SecurityConfig.java
+/Users/ykou/Documents/AMESFinalProj/src/main/java/com/kou5321/jobPortalWebsite/job/repository/JobSearchRepository.java
 /Users/ykou/Documents/AMESFinalProj/src/main/java/com/kou5321/jobPortalWebsite/user/dto/LoginRequest.java
+/Users/ykou/Documents/AMESFinalProj/src/main/java/com/kou5321/jobPortalWebsite/job/model/JobPosting.java
 /Users/ykou/Documents/AMESFinalProj/src/main/java/com/kou5321/jobPortalWebsite/job/repository/SearchRepository.java
+/Users/ykou/Documents/AMESFinalProj/src/main/java/com/kou5321/jobPortalWebsite/crawler/JobDataCrawlerService.java
 /Users/ykou/Documents/AMESFinalProj/src/main/java/com/kou5321/jobPortalWebsite/config/RepositoryConfig.java
 /Users/ykou/Documents/AMESFinalProj/src/main/java/com/kou5321/jobPortalWebsite/user/dto/SignUpRequest.java
 /Users/ykou/Documents/AMESFinalProj/src/main/java/com/kou5321/jobPortalWebsite/job/repository/PostRepository.java
@@ -9,6 +12,9 @@
 /Users/ykou/Documents/AMESFinalProj/src/main/java/com/kou5321/jobPortalWebsite/user/controller/UserController.java
 /Users/ykou/Documents/AMESFinalProj/src/main/java/com/kou5321/jobPortalWebsite/user/service/UserService.java
 /Users/ykou/Documents/AMESFinalProj/src/main/java/com/kou5321/jobPortalWebsite/job/model/Post.java
+/Users/ykou/Documents/AMESFinalProj/src/main/java/com/kou5321/jobPortalWebsite/job/repository/JobPostingRepository.java
+/Users/ykou/Documents/AMESFinalProj/src/main/java/com/kou5321/jobPortalWebsite/job/repository/JobSearchRepositoryImpl.java
 /Users/ykou/Documents/AMESFinalProj/src/main/java/com/kou5321/jobPortalWebsite/job/controller/PostController.java
+/Users/ykou/Documents/AMESFinalProj/src/main/java/com/kou5321/jobPortalWebsite/job/controller/JobPostingController.java
 /Users/ykou/Documents/AMESFinalProj/src/main/java/com/kou5321/jobPortalWebsite/JobPortalWebsiteApplication.java
 /Users/ykou/Documents/AMESFinalProj/src/main/java/com/kou5321/jobPortalWebsite/user/repository/UserRepository.java
