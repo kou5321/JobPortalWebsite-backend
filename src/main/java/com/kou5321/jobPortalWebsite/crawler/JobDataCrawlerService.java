@@ -22,6 +22,11 @@ public class JobDataCrawlerService {
 
     public void crawlGitHubJobPostings() {
         try {
+            log.info("Deleting all existing job postings");
+            jobPostingRepository.deleteAll();
+
+            // It might be good to wait for a second to ensure that delete operation has completed
+            Thread.sleep(1000);
             log.info("begin web crawler");
             String GITHUB_URL = "https://github.com/ReaVNaiL/New-Grad-2024"; // Make sure this is the correct URL
             Document doc = Jsoup.connect(GITHUB_URL).get();
@@ -38,15 +43,15 @@ public class JobDataCrawlerService {
                 if (cells.size() > 0) {
                     // Assuming the structure of the table is known and consistent
                     String name = cells.get(0).text();
-                    String roles = cells.get(1).text();
-                    String link = cells.get(1).select("a").attr("href");
-                    String requirements = cells.get(2).text();
+                    String roles = cells.get(2).text();
+                    String link = cells.get(2).select("a").attr("href");
+                    String sponsor = cells.get(3).text();
 
                     // Here you would create your JobPosting object and save it
                     JobPosting jobPosting = new JobPosting();
                     jobPosting.setCompany(name);
                     jobPosting.setJobTitle(roles);
-                    jobPosting.setSponsor(requirements);
+                    jobPosting.setSponsor(sponsor);
                     jobPosting.setLink(link);
 
                     // Save each job posting
