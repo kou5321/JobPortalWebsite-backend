@@ -16,10 +16,10 @@ public class JobPosting {
     @TextIndexed
     private String category;
     @TextIndexed
-    private String jobTitle;
+    private String title;
     @TextIndexed
     private String yoe;
-    private String data_added;
+    private String date_added;
     private String location;
     private String sponsor;
     private String apply_link;

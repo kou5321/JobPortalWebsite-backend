@@ -54,7 +54,7 @@ public class GithubCrawlerService {
                     // Here you would create your JobPosting object and save it
                     JobPosting jobPosting = new JobPosting();
                     jobPosting.setCompany(name);
-                    jobPosting.setJobTitle(roles);
+                    jobPosting.setTitle(roles);
                     jobPosting.setSponsor(sponsor);
                     jobPosting.setApply_link(link);
 
