@@ -12,12 +12,11 @@ import org.springframework.stereotype.Service;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import java.io.IOException;
 
 @Slf4j
 @Service
 @EnableScheduling
-public class JobDataCrawlerService {
+public class GithubCrawlerService {
     private static final String GITHUB_URL = "https://raw.githubusercontent.com/ReaVNaiL/New-Grad-2024/main/README.md";
 
     @Autowired

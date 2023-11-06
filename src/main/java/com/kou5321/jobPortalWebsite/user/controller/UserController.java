@@ -23,7 +23,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("/api/users")
+    @PostMapping("/api/users/register")
     public ModelAndView signUp(@RequestBody SignUpRequest request, HttpServletRequest httpServletRequest) {
         userService.signUp(request);
 

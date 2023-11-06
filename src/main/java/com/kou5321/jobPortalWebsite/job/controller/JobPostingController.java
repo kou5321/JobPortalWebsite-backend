@@ -1,10 +1,12 @@
 package com.kou5321.jobPortalWebsite.job.controller;
 
+import com.kou5321.jobPortalWebsite.crawler.GithubCrawlerService;
 import com.kou5321.jobPortalWebsite.job.model.JobPosting;
 import com.kou5321.jobPortalWebsite.job.repository.*;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -16,12 +18,14 @@ public class JobPostingController {
     JobPostingRepository jobPostingRepository;
     @Autowired
     JobSearchRepositoryImpl jobSearchRepository;
+    @Autowired
+    GithubCrawlerService githubCrawlerService;
 
-//    @RequestMapping("/")
-//    @Hidden
-//    public void redirect(HttpServletResponse response) throws IOException {
-//        response.sendRedirect("/swagger-ui.html");
-//    }
+    @RequestMapping("/")
+    @Hidden
+    public void redirect(HttpServletResponse response) throws IOException {
+        response.sendRedirect("/swagger-ui.html");
+    }
 
     @GetMapping("/getAllJobPosts")
     public List<JobPosting> getAllPosts() {
@@ -36,5 +40,11 @@ public class JobPostingController {
     @GetMapping("/jobPost/search/text={text}")
     public List<JobPosting> searchPost(@PathVariable String text) {
         return jobSearchRepository.findByText(text);
+    }
+
+    @GetMapping("/crawl")
+    public ResponseEntity<String> crawlAndSaveJobs() {
+        githubCrawlerService.crawlGitHubJobPostings();
+        return ResponseEntity.ok("Job postings have been crawled and saved.");
     }
 }
