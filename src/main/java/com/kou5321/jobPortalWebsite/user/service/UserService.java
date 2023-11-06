@@ -22,14 +22,13 @@ public class UserService {
 
     @Transactional
     public User signUp(SignUpRequest request) {
-        if (userRepository.existsByEmail(request.email())) {
-            throw new IllegalArgumentException("Email `%s` is already exists.".formatted(request.email()));
-        }
-        if (userRepository.existsByUsername(request.username())) {
-            throw new IllegalArgumentException("Username `%s` is already exists.".formatted(request.username()));
-        }
+        validateUserUniqueness(request.email(), request.username());
 
-        User newUser = this.createNewUser(request);
+        User newUser = User.builder()
+                .email(request.email())
+                .username(request.username())
+                .password(passwordEncoder.encode(request.password()))
+                .build();
         return userRepository.save(newUser);
     }
 
@@ -63,11 +62,12 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
     }
 
-    private User createNewUser(SignUpRequest request) {
-        return User.builder()
-                .email(request.email())
-                .username(request.username())
-                .password(passwordEncoder.encode(request.password()))
-                .build();
+    private void validateUserUniqueness(String email, String username) {
+        if (userRepository.existsByEmail(email)) {
+            throw new IllegalStateException("Email already exists.");
+        }
+        if (userRepository.existsByUsername(username)) {
+            throw new IllegalStateException("Username already exists.");
+        }
     }
 }

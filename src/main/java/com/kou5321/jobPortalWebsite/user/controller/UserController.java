@@ -24,15 +24,15 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public User signUp(@RequestBody SignUpRequest request) {
-        userService.signUp(request);
-        return userService.signUp(request);
+    public ResponseEntity<User> signUp(@RequestBody SignUpRequest request) {
+        User newUser = userService.signUp(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
-    @ResponseStatus(CREATED)
     @PostMapping("/login")
-    public User login(@RequestBody LoginRequest request) {
-        return userService.login(request);
+    public ResponseEntity<User> login(@RequestBody LoginRequest request) {
+        User loggedInUser = userService.login(request);
+        return ResponseEntity.ok(loggedInUser);
     }
 
     @PostMapping("/{userId}/apply-job-posting")
@@ -42,11 +42,16 @@ public class UserController {
         return ResponseEntity.ok("Job Posting marked as applied successfully.");
     }
 
-    // Endpoint to unmark a job posting as applied
     @DeleteMapping("/{userId}/unapply-job-posting")
     public ResponseEntity<String> unmarkAppliedJobPosting(@PathVariable UUID userId, @RequestBody String jobPostingId) {
         User user = userService.getUserById(userId);
         userService.unmarkAppliedJobPosting(user, jobPostingId);
         return ResponseEntity.ok("Job Posting unmarked as applied successfully.");
+    }
+
+    // TODO: Implement this function
+    @GetMapping("/{userId}/get-user-applied-list")
+    public ResponseEntity<String> getUserAppliedList(@PathVariable UUID userId) {
+        return null;
     }
 }
