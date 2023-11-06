@@ -42,6 +42,7 @@ public class UserService {
 
     @Transactional
     public void markAppliedJobPosting(User user, String jobPostingId) {
+        // TODO: check if jobPostingId exists
         if (!user.getAppliedJobPostingsIds().contains(jobPostingId)) {
             user.getAppliedJobPostingsIds().add(jobPostingId);
             userRepository.save(user);
@@ -50,6 +51,7 @@ public class UserService {
 
     @Transactional
     public void unmarkAppliedJobPosting(User user, String jobPostingId) {
+        // TODO: check if jobPostingId exists
         if (user.getAppliedJobPostingsIds().contains(jobPostingId)) {
             user.getAppliedJobPostingsIds().remove(jobPostingId);
             userRepository.save(user);
