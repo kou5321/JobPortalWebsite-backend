@@ -78,7 +78,7 @@
 			<version>6.1.5</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-web -->
+<!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.security/spring-security-web &ndash;&gt;-->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>

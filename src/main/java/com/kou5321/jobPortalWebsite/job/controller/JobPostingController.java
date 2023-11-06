@@ -1,6 +1,7 @@
 package com.kou5321.jobPortalWebsite.job.controller;
 
 import com.kou5321.jobPortalWebsite.crawler.GithubCrawlerService;
+import com.kou5321.jobPortalWebsite.crawler.JobPulseCrawlerService;
 import com.kou5321.jobPortalWebsite.job.model.JobPosting;
 import com.kou5321.jobPortalWebsite.job.repository.*;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -20,6 +21,8 @@ public class JobPostingController {
     JobSearchRepositoryImpl jobSearchRepository;
     @Autowired
     GithubCrawlerService githubCrawlerService;
+    @Autowired
+    JobPulseCrawlerService jobPulseCrawlerService;
 
     @RequestMapping("/")
     @Hidden
@@ -42,9 +45,15 @@ public class JobPostingController {
         return jobSearchRepository.findByText(text);
     }
 
-    @GetMapping("/crawl")
-    public ResponseEntity<String> crawlAndSaveJobs() {
+    @GetMapping("/githubCrawler")
+    public ResponseEntity<String> githubCrawler() {
         githubCrawlerService.crawlGitHubJobPostings();
+        return ResponseEntity.ok("Job postings have been crawled and saved.");
+    }
+
+    @GetMapping("/JobPulseCrawler")
+    public ResponseEntity<String> jobPulseCrawler() {
+        jobPulseCrawlerService.fetchAndSaveJobPostings();
         return ResponseEntity.ok("Job postings have been crawled and saved.");
     }
 }

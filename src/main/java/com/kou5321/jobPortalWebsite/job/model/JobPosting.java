@@ -14,20 +14,13 @@ public class JobPosting {
     @TextIndexed
     private String company;
     @TextIndexed
+    private String category;
+    @TextIndexed
     private String jobTitle;
     @TextIndexed
-    private String exp = "?";
+    private String yoe;
+    private String data_added;
+    private String location;
     private String sponsor;
-    private String link;
-
-    @Override
-    public String toString() {
-        return "JobPosting{" +
-                "company='" + company + '\'' +
-                ", jobTitle='" + jobTitle + '\'' +
-                ", exp='" + exp + '\'' +
-                ", sponsor='" + sponsor + '\'' +
-                ", link='" + link + '\'' +
-                '}';
-    }
+    private String apply_link;
 }

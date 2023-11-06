@@ -58,7 +58,7 @@ public class GithubCrawlerService {
                     jobPosting.setCompany(name);
                     jobPosting.setJobTitle(roles);
                     jobPosting.setSponsor(sponsor);
-                    jobPosting.setLink(link);
+                    jobPosting.setApply_link(link);
 
                     // Save each job posting
                     jobPostingRepository.save(jobPosting);
