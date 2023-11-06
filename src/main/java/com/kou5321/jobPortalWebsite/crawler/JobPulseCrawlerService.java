@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,6 +16,7 @@ import java.util.List;
 
 @Slf4j
 @Service
+@EnableScheduling
 public class JobPulseCrawlerService {
     private final RestTemplate restTemplate;
     private final JobPostingRepository jobPostingRepository;
@@ -24,6 +27,9 @@ public class JobPulseCrawlerService {
         this.jobPostingRepository = jobPostingRepository;
     }
 
+
+    // executed every 6 hours
+    @Scheduled(cron = "0 0 */6 * * ?")
     public void fetchAndSaveJobPostings() {
         int totalJobPostingsToFetch = 100;
         int pageSize = 20;
