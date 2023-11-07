@@ -33,6 +33,11 @@ public class User {
     @Column(name = "job_posting_id")
     private Set<String> appliedJobPostingsIds = new HashSet<>();
 
+    @ElementCollection
+    @CollectionTable(name = "user_viewed_job_postings", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "job_posting_id")
+    private Set<String> viewedJobPostingsIds = new HashSet<>();
+
     @Override
     public String toString() {
         return "User{" +

@@ -81,6 +81,27 @@ public class UserService {
         return new HashSet<>(jobPostings);
     }
 
+    @Transactional
+    public void markViewedJobPosting(User user, String jobPostingId) {
+        // You can also check if jobPostingId exists in the JobPostingRepository like in markAppliedJobPosting
+        user.getViewedJobPostingsIds().add(jobPostingId);
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void unmarkViewedJobPosting(User user, String jobPostingId) {
+        user.getViewedJobPostingsIds().remove(jobPostingId);
+        userRepository.save(user);
+    }
+
+    @Transactional(readOnly = true)
+    public Set<JobPosting> getUserViewedJobPostings(UUID userId) {
+        User user = getUserById(userId);
+        Set<String> viewedJobPostingsIds = user.getViewedJobPostingsIds();
+        List<JobPosting> jobPostings = jobPostingRepository.findAllById(viewedJobPostingsIds);
+        return new HashSet<>(jobPostings);
+    }
+
     @Transactional(readOnly = true)
     public User getUserById(UUID userId) {
         return userRepository.findById(userId)

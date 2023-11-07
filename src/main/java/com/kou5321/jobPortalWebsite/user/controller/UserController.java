@@ -50,4 +50,24 @@ public class UserController {
         Set<JobPosting> appliedJobPostings = userService.getUserAppliedJobPostings(userId);
         return ResponseEntity.ok(appliedJobPostings);
     }
+
+    @PostMapping("/{userId}/mark-viewed-job")
+    public ResponseEntity<String> markViewedJobPosting(@PathVariable UUID userId, @RequestParam String jobPostingId) {
+        User user = userService.getUserById(userId);
+        userService.markViewedJobPosting(user, jobPostingId);
+        return ResponseEntity.ok("Job Posting marked as viewed successfully.");
+    }
+
+    @DeleteMapping("/{userId}/unmark-viewed-job")
+    public ResponseEntity<String> unmarkViewedJobPosting(@PathVariable UUID userId, @RequestParam String jobPostingId) {
+        User user = userService.getUserById(userId);
+        userService.unmarkViewedJobPosting(user, jobPostingId);
+        return ResponseEntity.ok("Job Posting unmarked as viewed successfully.");
+    }
+
+    @GetMapping("/{userId}/get-user-viewed-list")
+    public ResponseEntity<Set<JobPosting>> getUserViewedList(@PathVariable UUID userId) {
+        Set<JobPosting> viewedJobPostings = userService.getUserViewedJobPostings(userId);
+        return ResponseEntity.ok(viewedJobPostings);
+    }
 }
