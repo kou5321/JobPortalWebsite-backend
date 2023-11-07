@@ -1,5 +1,6 @@
 package com.kou5321.jobPortalWebsite.user.controller;
 
+import com.kou5321.jobPortalWebsite.job.model.JobPosting;
 import com.kou5321.jobPortalWebsite.user.dto.LoginRequest;
 import com.kou5321.jobPortalWebsite.user.dto.SignUpRequest;
 import com.kou5321.jobPortalWebsite.user.entity.User;
@@ -52,8 +53,8 @@ public class UserController {
 
     // TODO: Implement this function
     @GetMapping("/{userId}/get-user-applied-list")
-    public ResponseEntity<Set<String>> getUserAppliedList(@PathVariable UUID userId) {
-        Set<String> appliedJobPostings = userService.getUserAppliedJobPostings(userId);
+    public ResponseEntity<Set<JobPosting>> getUserAppliedList(@PathVariable UUID userId) {
+        Set<JobPosting> appliedJobPostings = userService.getUserAppliedJobPostings(userId);
         return ResponseEntity.ok(appliedJobPostings);
     }
 }

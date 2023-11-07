@@ -1,5 +1,6 @@
 package com.kou5321.jobPortalWebsite.user.service;
 
+import com.kou5321.jobPortalWebsite.job.model.JobPosting;
 import com.kou5321.jobPortalWebsite.job.repository.JobPostingRepository;
 import com.kou5321.jobPortalWebsite.job.service.JobPostingService;
 import com.kou5321.jobPortalWebsite.user.dto.LoginRequest;
@@ -14,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -75,9 +78,16 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Set<String> getUserAppliedJobPostings(UUID userId) {
+    public Set<JobPosting> getUserAppliedJobPostings(UUID userId) {
+        // Assuming getUserById is defined elsewhere and returns a User object
         User user = getUserById(userId);
-        return user.getAppliedJobPostingsIds();
+        Set<String> appliedJobPostingsIds = user.getAppliedJobPostingsIds();
+
+        // Now, fetch the JobPosting objects for the given IDs
+        List<JobPosting> jobPostings = jobPostingRepository.findAllById(appliedJobPostingsIds);
+
+        // Convert the List to a Set and return
+        return new HashSet<>(jobPostings);
     }
 
     @Transactional(readOnly = true)
