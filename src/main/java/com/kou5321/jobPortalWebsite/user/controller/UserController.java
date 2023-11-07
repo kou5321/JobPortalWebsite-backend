@@ -5,19 +5,13 @@ import com.kou5321.jobPortalWebsite.user.dto.LoginRequest;
 import com.kou5321.jobPortalWebsite.user.dto.SignUpRequest;
 import com.kou5321.jobPortalWebsite.user.entity.User;
 import com.kou5321.jobPortalWebsite.user.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
 
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-
-import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequiredArgsConstructor
@@ -51,7 +45,6 @@ public class UserController {
         return ResponseEntity.ok("Job Posting unmarked as applied successfully.");
     }
 
-    // TODO: Implement this function
     @GetMapping("/{userId}/get-user-applied-list")
     public ResponseEntity<Set<JobPosting>> getUserAppliedList(@PathVariable UUID userId) {
         Set<JobPosting> appliedJobPostings = userService.getUserAppliedJobPostings(userId);

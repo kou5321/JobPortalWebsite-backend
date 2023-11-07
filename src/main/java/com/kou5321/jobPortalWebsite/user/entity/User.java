@@ -1,13 +1,11 @@
 package com.kou5321.jobPortalWebsite.user.entity;
 
-import com.kou5321.jobPortalWebsite.job.model.JobPosting;
 import jakarta.persistence.*;
 import lombok.*;
-import org.bson.types.ObjectId;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Getter

@@ -2,13 +2,11 @@ package com.kou5321.jobPortalWebsite.user.service;
 
 import com.kou5321.jobPortalWebsite.job.model.JobPosting;
 import com.kou5321.jobPortalWebsite.job.repository.JobPostingRepository;
-import com.kou5321.jobPortalWebsite.job.service.JobPostingService;
 import com.kou5321.jobPortalWebsite.user.dto.LoginRequest;
 import com.kou5321.jobPortalWebsite.user.dto.SignUpRequest;
 import com.kou5321.jobPortalWebsite.user.entity.User;
 import com.kou5321.jobPortalWebsite.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,8 +28,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     @Autowired
     private final JobPostingRepository jobPostingRepository;
-    @Autowired
-    private final JobPostingService jobPostingService;
 
     @Transactional
     public User signUp(SignUpRequest request) {
@@ -79,14 +75,9 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Set<JobPosting> getUserAppliedJobPostings(UUID userId) {
-        // Assuming getUserById is defined elsewhere and returns a User object
         User user = getUserById(userId);
         Set<String> appliedJobPostingsIds = user.getAppliedJobPostingsIds();
-
-        // Now, fetch the JobPosting objects for the given IDs
         List<JobPosting> jobPostings = jobPostingRepository.findAllById(appliedJobPostingsIds);
-
-        // Convert the List to a Set and return
         return new HashSet<>(jobPostings);
     }
 
