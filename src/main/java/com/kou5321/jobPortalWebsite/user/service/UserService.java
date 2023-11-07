@@ -1,12 +1,14 @@
 package com.kou5321.jobPortalWebsite.user.service;
 
 import com.kou5321.jobPortalWebsite.job.repository.JobPostingRepository;
+import com.kou5321.jobPortalWebsite.job.service.JobPostingService;
 import com.kou5321.jobPortalWebsite.user.dto.LoginRequest;
 import com.kou5321.jobPortalWebsite.user.dto.SignUpRequest;
 import com.kou5321.jobPortalWebsite.user.entity.User;
 import com.kou5321.jobPortalWebsite.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,9 +21,14 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @ComponentScan
 public class UserService {
+    @Autowired
     private final UserRepository userRepository;
+    @Autowired
     private final PasswordEncoder passwordEncoder;
+    @Autowired
     private final JobPostingRepository jobPostingRepository;
+    @Autowired
+    private final JobPostingService jobPostingService;
 
     @Transactional
     public User signUp(SignUpRequest request) {

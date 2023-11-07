@@ -37,14 +37,14 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/mark-appliy-job")
-    public ResponseEntity<String> markAppliedJobPosting(@PathVariable UUID userId, @RequestBody String jobPostingId) {
+    public ResponseEntity<String> markAppliedJobPosting(@PathVariable UUID userId, @RequestParam String jobPostingId) {
         User user = userService.getUserById(userId);
         userService.markAppliedJobPosting(user, jobPostingId);
         return ResponseEntity.ok("Job Posting marked as applied successfully.");
     }
 
     @DeleteMapping("/{userId}/unmark-apply-job")
-    public ResponseEntity<String> unmarkAppliedJobPosting(@PathVariable UUID userId, @RequestBody String jobPostingId) {
+    public ResponseEntity<String> unmarkAppliedJobPosting(@PathVariable UUID userId, @RequestParam String jobPostingId) {
         User user = userService.getUserById(userId);
         userService.unmarkAppliedJobPosting(user, jobPostingId);
         return ResponseEntity.ok("Job Posting unmarked as applied successfully.");
