@@ -1,5 +1,6 @@
 package com.kou5321.jobPortalWebsite.user.service;
 
+import com.kou5321.jobPortalWebsite.job.repository.JobPostingRepository;
 import com.kou5321.jobPortalWebsite.user.dto.LoginRequest;
 import com.kou5321.jobPortalWebsite.user.dto.SignUpRequest;
 import com.kou5321.jobPortalWebsite.user.entity.User;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -19,6 +21,7 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JobPostingRepository jobPostingRepository;
 
     @Transactional
     public User signUp(SignUpRequest request) {
@@ -42,7 +45,10 @@ public class UserService {
 
     @Transactional
     public void markAppliedJobPosting(User user, String jobPostingId) {
-        // TODO: check if jobPostingId exists
+        // Check if jobPostingId exists
+        jobPostingRepository.findById(jobPostingId).orElseThrow(
+                () -> new IllegalArgumentException("Job Posting not found with ID: " + jobPostingId)
+        );
         if (!user.getAppliedJobPostingsIds().contains(jobPostingId)) {
             user.getAppliedJobPostingsIds().add(jobPostingId);
             userRepository.save(user);
@@ -51,11 +57,20 @@ public class UserService {
 
     @Transactional
     public void unmarkAppliedJobPosting(User user, String jobPostingId) {
-        // TODO: check if jobPostingId exists
+        // Check if jobPostingId exists
+        jobPostingRepository.findById(jobPostingId).orElseThrow(
+                () -> new IllegalArgumentException("Job Posting not found with ID: " + jobPostingId)
+        );
         if (user.getAppliedJobPostingsIds().contains(jobPostingId)) {
             user.getAppliedJobPostingsIds().remove(jobPostingId);
             userRepository.save(user);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public Set<String> getUserAppliedJobPostings(UUID userId) {
+        User user = getUserById(userId);
+        return user.getAppliedJobPostingsIds();
     }
 
     @Transactional(readOnly = true)

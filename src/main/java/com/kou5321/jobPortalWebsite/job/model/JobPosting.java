@@ -1,5 +1,6 @@
 package com.kou5321.jobPortalWebsite.job.model;
 
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Document(collection = "JobCrawler")
 public class JobPosting {
+    @Id
+    private String id;
     @TextIndexed
     private String company;
     @TextIndexed
