@@ -23,10 +23,6 @@ public class JobPostingController {
     @Autowired
     JobSearchRepositoryImpl jobSearchRepository;
     @Autowired
-    GithubCrawlerService githubCrawlerService;
-    @Autowired
-    JobPulseCrawlerService jobPulseCrawlerService;
-    @Autowired
     JobPostingService jobPostingService;
 
     @RequestMapping("/")
@@ -53,17 +49,5 @@ public class JobPostingController {
     @GetMapping("/findJobById/{id}")
     public JobPosting getJobById(@PathVariable String id) {
         return jobPostingService.getJobPostingById(id);
-    }
-
-    @GetMapping("/githubCrawler")
-    public ResponseEntity<String> githubCrawler() {
-        githubCrawlerService.crawlGitHubJobPostings();
-        return ResponseEntity.ok("Job postings have been crawled and saved.");
-    }
-
-    @GetMapping("/JobPulseCrawler")
-    public ResponseEntity<String> jobPulseCrawler() {
-        jobPulseCrawlerService.fetchAndSaveJobPostings();
-        return ResponseEntity.ok("Job postings have been crawled and saved.");
     }
 }
