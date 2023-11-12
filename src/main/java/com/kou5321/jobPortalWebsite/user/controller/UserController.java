@@ -15,6 +15,8 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
+//@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 @RequestMapping("/users") // Added a request mapping to set a base path for all endpoints in this controller
 public class UserController {
     private final UserService userService;
@@ -70,4 +72,6 @@ public class UserController {
         Set<JobPosting> viewedJobPostings = userService.getUserViewedJobPostings(userId);
         return ResponseEntity.ok(viewedJobPostings);
     }
+
+    // TODO: consider add subscribe/unsubscribe email notification
 }
