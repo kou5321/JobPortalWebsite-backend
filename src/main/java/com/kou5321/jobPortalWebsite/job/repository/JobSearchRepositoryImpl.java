@@ -38,7 +38,7 @@ public class JobSearchRepositoryImpl implements JobSearchRepository {
                         new Document("$search",
                                 new Document("text",
                                         new Document("query", text)
-                                                .append("path", Arrays.asList("company", "jobTitle"))))
+                                                .append("path", Arrays.asList("company", "title", "location"))))
                 ));
 
         result.forEach(doc -> posts.add(converter.read(JobPosting.class, doc)));
