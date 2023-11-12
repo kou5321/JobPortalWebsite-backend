@@ -74,4 +74,6 @@ public class UserController {
     }
 
     // TODO: consider add subscribe/unsubscribe email notification
+
+    // TODO: add session-based logout api
 }
