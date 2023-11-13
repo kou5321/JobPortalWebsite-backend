@@ -23,7 +23,7 @@ public class GithubCrawlerService {
     private JobPostingRepository jobPostingRepository;
 
     // executed every 6 hours
-    @Scheduled(cron = "0 0 */6 * * ?")
+//    @Scheduled(cron = "0 0 */6 * * ?")
     public void crawlGitHubJobPostings() {
         try {
             log.info("Deleting all existing job postings");
