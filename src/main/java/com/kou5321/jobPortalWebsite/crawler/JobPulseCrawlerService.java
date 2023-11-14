@@ -41,7 +41,7 @@ public class JobPulseCrawlerService {
 
             log.info("begin web crawler");
             for (int pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
-                String apiUrl = "https://job-pulse.uc.r.appspot.com/jobs/sde?yoe_less_than=1&page_number=" + pageNumber + "&page_size=" + pageSize;
+                String apiUrl = "https://job-pulse.uc.r.appspot.com/jobs/sde?yoe_less_than=5&page_number=" + pageNumber + "&page_size=" + pageSize;
                 ResponseEntity<List<JobPosting>> responseEntity =
                         restTemplate.exchange(apiUrl, HttpMethod.GET, null, new ParameterizedTypeReference<List<JobPosting>>() {});
 

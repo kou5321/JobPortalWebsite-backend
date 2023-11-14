@@ -10,22 +10,24 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-//@EnableWebSecurity
+@EnableWebSecurity
 public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        return http
-//                .authorizeHttpRequests(auth -> {
-//                    auth.requestMatchers("/").permitAll();
-//                    auth.anyRequest().authenticated();
-//                })
-//                .oauth2Login(Customizer.withDefaults())
-//                .formLogin(Customizer.withDefaults())
-//                .build();
-//    }
+    // TODO: make addPost authentication -> hasAnyRole
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/").permitAll();
+                    auth.requestMatchers("/addPost").hasRole("ADMIN"); // Restrict access to /addPost
+                    auth.anyRequest().authenticated();
+                })
+                .oauth2Login(Customizer.withDefaults())
+                .formLogin(Customizer.withDefaults())
+                .build();
+    }
 }
