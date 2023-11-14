@@ -4,7 +4,9 @@ import com.kou5321.jobPortalWebsite.job.model.JobPosting;
 import com.kou5321.jobPortalWebsite.job.repository.JobPostingRepository;
 import com.kou5321.jobPortalWebsite.user.dto.LoginRequest;
 import com.kou5321.jobPortalWebsite.user.dto.SignUpRequest;
+import com.kou5321.jobPortalWebsite.user.entity.Role;
 import com.kou5321.jobPortalWebsite.user.entity.User;
+import com.kou5321.jobPortalWebsite.user.repository.RoleRepository;
 import com.kou5321.jobPortalWebsite.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +25,8 @@ public class UserService {
     private final UserRepository userRepository;
     @Autowired
     private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private final RoleRepository roleRepository;
     @Autowired
     private final JobPostingRepository jobPostingRepository;
 
@@ -37,8 +38,15 @@ public class UserService {
                 .email(request.email())
                 .username(request.username())
                 .password(passwordEncoder.encode(request.password()))
+                .roles(Collections.singleton(getUserRole())) // Set default role
                 .build();
+
         return userRepository.save(newUser);
+    }
+
+    private Role getUserRole() {
+        return roleRepository.findByName("USER") // Replace with your role name
+                .orElseThrow(() -> new IllegalStateException("User role not found."));
     }
 
     @Transactional(readOnly = true)

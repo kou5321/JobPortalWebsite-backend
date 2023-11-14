@@ -26,7 +26,8 @@ public class JobPostingController {
     @RequestMapping("/")
     @Hidden
     public void redirect(HttpServletResponse response) throws IOException {
-        response.sendRedirect("/swagger-ui.html");
+        response.sendRedirect("/" +
+                "swagger-ui.html");
     }
 
     @GetMapping("/getAllJobPosts")
