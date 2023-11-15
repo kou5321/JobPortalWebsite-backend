@@ -60,17 +60,24 @@ public class UserController {
         return ResponseEntity.ok("Job Posting marked as viewed successfully.");
     }
 
-    @DeleteMapping("/{userId}/unmark-viewed-job")
-    public ResponseEntity<String> unmarkViewedJobPosting(@PathVariable UUID userId, @RequestParam String jobPostingId) {
-        User user = userService.getUserById(userId);
-        userService.unmarkViewedJobPosting(user, jobPostingId);
-        return ResponseEntity.ok("Job Posting unmarked as viewed successfully.");
-    }
+    // not useful for the business logic
+//    @DeleteMapping("/{userId}/unmark-viewed-job")
+//    public ResponseEntity<String> unmarkViewedJobPosting(@PathVariable UUID userId, @RequestParam String jobPostingId) {
+//        User user = userService.getUserById(userId);
+//        userService.unmarkViewedJobPosting(user, jobPostingId);
+//        return ResponseEntity.ok("Job Posting unmarked as viewed successfully.");
+//    }
 
     @GetMapping("/{userId}/get-user-viewed-list")
     public ResponseEntity<Set<JobPosting>> getUserViewedList(@PathVariable UUID userId) {
         Set<JobPosting> viewedJobPostings = userService.getUserViewedJobPostings(userId);
         return ResponseEntity.ok(viewedJobPostings);
+    }
+
+    @GetMapping("/get-by-username/{userName}")
+    public ResponseEntity<User> getUserInfoByUserName(@PathVariable String userName) {
+        User userInfo = userService.getUserByUsername(userName);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userInfo);
     }
 
     // TODO: consider add subscribe/unsubscribe email notification

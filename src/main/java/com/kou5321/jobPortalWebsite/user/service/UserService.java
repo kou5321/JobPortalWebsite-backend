@@ -116,6 +116,12 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
     }
 
+    @Transactional(readOnly = true)
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with username: " + username));
+    }
+
     private void validateUserUniqueness(String email, String username) {
         if (userRepository.existsByEmail(email)) {
             throw new IllegalStateException("Email already exists.");
