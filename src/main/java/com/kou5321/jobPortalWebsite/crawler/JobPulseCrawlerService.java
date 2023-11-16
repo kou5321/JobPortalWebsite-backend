@@ -37,7 +37,7 @@ public class JobPulseCrawlerService {
 
         try {
             log.info("Deleting all existing job postings");
-            jobPostingRepository.deleteAll();
+//            jobPostingRepository.deleteAll();
 
             log.info("begin web crawler");
             for (int pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
