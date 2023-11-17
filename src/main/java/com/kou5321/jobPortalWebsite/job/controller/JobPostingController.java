@@ -6,6 +6,7 @@ import com.kou5321.jobPortalWebsite.job.repository.JobSearchRepositoryImpl;
 import com.kou5321.jobPortalWebsite.job.service.JobPostingService;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 //@CrossOrigin(origins = "http://localhost:3000")
 @CrossOrigin(origins = "*")
+@Slf4j
 public class JobPostingController {
     @Autowired
     JobPostingRepository jobPostingRepository;
@@ -39,6 +41,7 @@ public class JobPostingController {
     @PostMapping("/addJobPost")
     @PreAuthorize("hasRole('ADMIN')")
     public JobPosting addPost(@RequestBody JobPosting post) {
+        log.info("add a job pos: " + post);
         return jobPostingRepository.save(post);
     }
 
