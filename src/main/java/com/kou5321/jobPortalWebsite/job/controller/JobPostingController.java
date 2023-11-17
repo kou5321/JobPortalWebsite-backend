@@ -7,6 +7,7 @@ import com.kou5321.jobPortalWebsite.job.service.JobPostingService;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -36,6 +37,7 @@ public class JobPostingController {
     }
 
     @PostMapping("/addJobPost")
+    @PreAuthorize("hasRole('ADMIN')")
     public JobPosting addPost(@RequestBody JobPosting post) {
         return jobPostingRepository.save(post);
     }
