@@ -2,7 +2,7 @@
 
 ### [Demo](#)&nbsp;&nbsp;&nbsp;&nbsp;[Documentation](#)
 
-This codebase was created to demonstrate a fully fledged fullstack application built with **Java 17 + Spring Boot 3** including features like job postings, user authentication, authorization, and more.
+This codebase was created to demonstrate a fully fledged fullstack application built with **Java 21 + Spring Boot 3** including features like job postings, user authentication, authorization, and more.
 
 We've gone to great lengths to adhere to the **Java 21 + Spring Boot 3** community styleguide & best practices.
 
@@ -50,7 +50,7 @@ Packages
 - com.kou5321.jobPortalWebsite.user - Manages user registration, authentication, and profile operations.
 - com.kou5321.jobPortalWebsite.config - Configuration for security, CORS, and other application settings.
 Classes
-- obPostingController - Endpoints for job posting CRUD operations.
+- JobPostingController - Endpoints for job posting CRUD operations.
 - UserController - Endpoints for user authentication and management.
 - SecurityConfig - Security configurations for the application.
 
