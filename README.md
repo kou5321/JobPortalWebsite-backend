@@ -8,6 +8,8 @@ We've gone to great lengths to adhere to the **Java 21 + Spring Boot 3** communi
 
 It utilizes MongoDB to store jobPosting data and PostgreSQL to store user information.
 
+The front end part is available at https://github.com/kou5321/JobPortalWebsite-frontend
+
 ---
 
 ## Table of Contents
