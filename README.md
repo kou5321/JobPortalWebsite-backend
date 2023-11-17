@@ -6,6 +6,8 @@ This codebase was created to demonstrate a fully fledged fullstack application b
 
 We've gone to great lengths to adhere to the **Java 21 + Spring Boot 3** community styleguide & best practices.
 
+It utilizes MongoDB to store jobPosting data and PostgreSQL to store user information.
+
 ---
 
 ## Table of Contents
