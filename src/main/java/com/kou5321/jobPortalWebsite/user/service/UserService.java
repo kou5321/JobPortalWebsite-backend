@@ -91,16 +91,17 @@ public class UserService {
 
     @Transactional
     public void markViewedJobPosting(User user, String jobPostingId) {
-        // You can also check if jobPostingId exists in the JobPostingRepository like in markAppliedJobPosting
+        // TODO: also check if jobPostingId exists in the JobPostingRepository like in markAppliedJobPosting
         user.getViewedJobPostingsIds().add(jobPostingId);
         userRepository.save(user);
     }
 
-    @Transactional
-    public void unmarkViewedJobPosting(User user, String jobPostingId) {
-        user.getViewedJobPostingsIds().remove(jobPostingId);
-        userRepository.save(user);
-    }
+    // not useful for business logic
+//    @Transactional
+//    public void unmarkViewedJobPosting(User user, String jobPostingId) {
+//        user.getViewedJobPostingsIds().remove(jobPostingId);
+//        userRepository.save(user);
+//    }
 
     @Transactional(readOnly = true)
     public Set<JobPosting> getUserViewedJobPostings(UUID userId) {
