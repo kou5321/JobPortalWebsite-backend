@@ -1,5 +1,6 @@
 package com.kou5321.jobPortalWebsite.user.service;
 
+import com.kou5321.jobPortalWebsite.security.CustomUserPrincipal;
 import com.kou5321.jobPortalWebsite.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,8 +25,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
-        return new org.springframework.security.core.userdetails.User(user.getUsername(),
-                user.getPassword(), getAuthorities(user));
+        return new CustomUserPrincipal(user);
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(User user) {

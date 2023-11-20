@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.kou5321.jobPortalWebsite.user.dto.JwtAuthenticationResponse;
+
 
 import java.util.Set;
 import java.util.UUID;
@@ -28,9 +30,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody LoginRequest request) {
-        User loggedInUser = userService.login(request);
-        return ResponseEntity.ok(loggedInUser);
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        String jwt = userService.login(request);
+        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
     }
 
     @PostMapping("/{userId}/mark-applied-job")

@@ -1,28 +1,33 @@
-package com.kou5321.jobPortalWebsite.config;
+package com.kou5321.jobPortalWebsite.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 
 import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    // TODO: when authentication finished, I want to redirect to successful page
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -40,8 +45,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
+    DefaultSecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
                 .addFilterBefore(corsFilter(), ChannelProcessingFilter.class)
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll(); // Permit preflight requests
@@ -50,8 +55,12 @@ public class SecurityConfig {
                     auth.anyRequest().permitAll(); // All other requests are publicly accessible
                 })
                 .formLogin(Customizer.withDefaults()) // Form login configuration
-                .csrf().disable() // disable this can make user to login
-                .build();
+                .csrf().disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        return http.build();
     }
 
     @Bean
@@ -68,8 +77,23 @@ public class SecurityConfig {
     }
 
     @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder())
+                .and()
+                .build();
+    }
+
+
+    @Bean
     public CorsFilter corsFilter() {
         return new CorsFilter(corsConfigurationSource());
+    }
+
+    @Bean
+    public JwtTokenFilter jwtTokenFilter() {
+        return new JwtTokenFilter();
     }
 
 }

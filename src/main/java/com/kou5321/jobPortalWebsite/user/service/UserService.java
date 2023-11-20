@@ -2,6 +2,7 @@ package com.kou5321.jobPortalWebsite.user.service;
 
 import com.kou5321.jobPortalWebsite.job.model.JobPosting;
 import com.kou5321.jobPortalWebsite.job.repository.JobPostingRepository;
+import com.kou5321.jobPortalWebsite.security.JwtTokenProvider;
 import com.kou5321.jobPortalWebsite.user.dto.LoginRequest;
 import com.kou5321.jobPortalWebsite.user.dto.SignUpRequest;
 import com.kou5321.jobPortalWebsite.user.entity.Role;
@@ -11,6 +12,10 @@ import com.kou5321.jobPortalWebsite.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +24,6 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-@ComponentScan
 public class UserService {
     @Autowired
     private final UserRepository userRepository;
@@ -29,6 +33,8 @@ public class UserService {
     private final RoleRepository roleRepository;
     @Autowired
     private final JobPostingRepository jobPostingRepository;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider tokenProvider;
 
     @Transactional
     public User signUp(SignUpRequest request) {
@@ -49,13 +55,13 @@ public class UserService {
                 .orElseThrow(() -> new IllegalStateException("User role not found."));
     }
 
-    @Transactional(readOnly = true)
-    public User login(LoginRequest request) {
-        return userRepository
-                .findByUsername(request.username())
-                .filter(user -> passwordEncoder.matches(request.password(), user.getPassword()))
-                .orElseThrow(() -> new IllegalArgumentException("Invalid name or password."));
-    }
+//    @Transactional(readOnly = true)
+//    public User login(LoginRequest request) {
+//        return userRepository
+//                .findByUsername(request.username())
+//                .filter(user -> passwordEncoder.matches(request.password(), user.getPassword()))
+//                .orElseThrow(() -> new IllegalArgumentException("Invalid name or password."));
+//    }
 
     @Transactional
     public void markAppliedJobPosting(User user, String jobPostingId) {
@@ -131,4 +137,18 @@ public class UserService {
             throw new IllegalStateException("Username already exists.");
         }
     }
+
+    // In UserService
+    public String login(LoginRequest request) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.username(),
+                        request.password()
+                )
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return tokenProvider.generateToken(authentication);
+    }
+
 }

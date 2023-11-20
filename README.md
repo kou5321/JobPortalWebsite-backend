@@ -52,7 +52,7 @@ Access the application at http://localhost:8080.
 Packages
 - com.kou5321.jobPortalWebsite.job - Contains controllers, services, and repositories for job-related operations.
 - com.kou5321.jobPortalWebsite.user - Manages user registration, authentication, and profile operations.
-- com.kou5321.jobPortalWebsite.config - Configuration for security, CORS, and other application settings.
+- com.kou5321.jobPortalWebsite.security - Configuration for security, CORS, and other application settings.
 Classes
 - JobPostingController - Endpoints for job posting CRUD operations.
 - UserController - Endpoints for user authentication and management.
