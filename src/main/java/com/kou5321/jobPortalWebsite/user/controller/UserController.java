@@ -3,6 +3,7 @@ package com.kou5321.jobPortalWebsite.user.controller;
 import com.kou5321.jobPortalWebsite.job.model.JobPosting;
 import com.kou5321.jobPortalWebsite.user.dto.LoginRequest;
 import com.kou5321.jobPortalWebsite.user.dto.SignUpRequest;
+import com.kou5321.jobPortalWebsite.user.dto.UserLoginResponse;
 import com.kou5321.jobPortalWebsite.user.entity.User;
 import com.kou5321.jobPortalWebsite.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +32,8 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        String jwt = userService.login(request);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+        UserLoginResponse response = userService.login(request);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/{userId}/mark-applied-job")

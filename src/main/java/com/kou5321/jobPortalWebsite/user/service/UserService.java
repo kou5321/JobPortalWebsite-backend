@@ -5,6 +5,7 @@ import com.kou5321.jobPortalWebsite.job.repository.JobPostingRepository;
 import com.kou5321.jobPortalWebsite.security.JwtTokenProvider;
 import com.kou5321.jobPortalWebsite.user.dto.LoginRequest;
 import com.kou5321.jobPortalWebsite.user.dto.SignUpRequest;
+import com.kou5321.jobPortalWebsite.user.dto.UserLoginResponse;
 import com.kou5321.jobPortalWebsite.user.entity.Role;
 import com.kou5321.jobPortalWebsite.user.entity.User;
 import com.kou5321.jobPortalWebsite.user.repository.RoleRepository;
@@ -139,7 +140,7 @@ public class UserService {
     }
 
     // In UserService
-    public String login(LoginRequest request) {
+    public UserLoginResponse login(LoginRequest request) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.username(),
@@ -148,7 +149,9 @@ public class UserService {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return tokenProvider.generateToken(authentication);
+        String jwt = tokenProvider.generateToken(authentication);
+        User user = getUserByUsername(request.username());
+        return new UserLoginResponse(jwt, user);
     }
 
 }
