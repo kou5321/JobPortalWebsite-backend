@@ -52,8 +52,11 @@ public class JobPostingController {
     }
 
     @GetMapping("/jobPost/search/text={text}")
-    public List<JobPosting> searchPost(@PathVariable String text) {
-        return jobSearchRepository.findByText(text);
+    public Page<JobPosting> searchPost(@PathVariable String text,
+                                       @RequestParam(defaultValue = "0") int page,
+                                       @RequestParam(defaultValue = "20") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return jobSearchRepository.findByText(text, pageable);
     }
 
     @GetMapping("/findJobById/{id}")

@@ -8,6 +8,10 @@ import com.mongodb.client.MongoDatabase;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.bson.conversions.Bson;
 import org.springframework.data.mongodb.core.convert.MongoConverter;
 import org.springframework.stereotype.Repository;
 
@@ -24,26 +28,27 @@ public class JobSearchRepositoryImpl implements JobSearchRepository {
     MongoConverter converter;
 
     @Override
-    public List<JobPosting> findByText(String text) {
-        final List<JobPosting> posts = new ArrayList<>();
+    public Page<JobPosting> findByText(String text, Pageable pageable) {
+        List<JobPosting> posts = new ArrayList<>();
 
         MongoDatabase database = client.getDatabase("jobListing");
         MongoCollection<Document> collection = database.getCollection("JobCrawler");
 
-        // Use aggregation to perform a text search on the collection
-        // 1, searching in the "techs", "desc", and "profile" fields
-        // 2. It limits the output to the first 5 documents
-        AggregateIterable<Document> result = collection.aggregate(
-                Arrays.asList(
-                        new Document("$search",
-                                new Document("text",
-                                        new Document("query", text)
-                                                .append("path", Arrays.asList("company", "title", "location"))))
-                ));
+        Bson textSearchQuery = new Document("$text",
+                new Document("$search", text));
+
+        long total = collection.countDocuments(textSearchQuery);
+
+        List<Bson> aggregationPipeline = Arrays.asList(
+                new Document("$match", textSearchQuery),
+                new Document("$skip", pageable.getOffset()),
+                new Document("$limit", pageable.getPageSize())
+        );
+
+        AggregateIterable<Document> result = collection.aggregate(aggregationPipeline);
 
         result.forEach(doc -> posts.add(converter.read(JobPosting.class, doc)));
 
-        log.info("Search for text '{}' returned {} results.", text, posts.size());
-        return posts;
+        return new PageImpl<>(posts, pageable, total);
     }
 }
