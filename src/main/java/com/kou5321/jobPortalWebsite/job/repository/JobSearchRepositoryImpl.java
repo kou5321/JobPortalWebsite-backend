@@ -6,6 +6,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Sorts;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +53,12 @@ public class JobSearchRepositoryImpl implements JobSearchRepository {
 
         long total = collection.countDocuments(filter);
 
+        // cannot sort data because crawler
+        Bson sortOperation = Sorts.descending("apply_link");
+
         List<Bson> aggregationPipeline = Arrays.asList(
                 new Document("$match", filter),
+                new Document("$sort", sortOperation),
                 new Document("$skip", pageable.getOffset()),
                 new Document("$limit", pageable.getPageSize())
         );
