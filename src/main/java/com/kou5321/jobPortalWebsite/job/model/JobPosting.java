@@ -23,6 +23,7 @@ public class JobPosting {
     @TextIndexed
     private String yoe;
     private String date_added;
+    @TextIndexed
     private String location;
     private String sponsor;
     private String apply_link;

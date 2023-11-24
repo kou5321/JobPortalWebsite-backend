@@ -7,5 +7,4 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface JobSearchRepository {
-    Page<JobPosting> findByText(String text, Pageable pageable);
 }

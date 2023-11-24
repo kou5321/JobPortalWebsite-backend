@@ -51,12 +51,14 @@ public class JobPostingController {
         return jobPostingRepository.save(post);
     }
 
-    @GetMapping("/jobPost/search/text={text}")
-    public Page<JobPosting> searchPost(@PathVariable String text,
-                                       @RequestParam(defaultValue = "0") int page,
-                                       @RequestParam(defaultValue = "20") int size) {
+    @GetMapping("/jobPost/search")
+    public Page<JobPosting> searchPost(
+            @RequestParam(required = false, defaultValue = "") String text,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(required = false) String country) {
         Pageable pageable = PageRequest.of(page, size);
-        return jobSearchRepository.findByText(text, pageable);
+        return jobSearchRepository.findByTextAndCountry(text, country, pageable);
     }
 
     @GetMapping("/findJobById/{id}")

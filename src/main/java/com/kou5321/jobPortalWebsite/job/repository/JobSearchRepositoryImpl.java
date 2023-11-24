@@ -5,6 +5,7 @@ import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,20 +28,28 @@ public class JobSearchRepositoryImpl implements JobSearchRepository {
     @Autowired
     MongoConverter converter;
 
-    @Override
-    public Page<JobPosting> findByText(String text, Pageable pageable) {
+    public Page<JobPosting> findByTextAndCountry(String text, String country, Pageable pageable) {
         List<JobPosting> posts = new ArrayList<>();
 
         MongoDatabase database = client.getDatabase("jobListing");
         MongoCollection<Document> collection = database.getCollection("JobCrawler");
 
-        Bson textSearchQuery = new Document("$text",
-                new Document("$search", text));
+        Bson filter = new Document();
 
-        long total = collection.countDocuments(textSearchQuery);
+        // Add text search condition if text is provided and not empty
+        if (text != null && !text.isEmpty()) {
+            filter = Filters.and(filter, new Document("$text", new Document("$search", text)));
+        }
+
+        // Add country filter condition if country is provided and not empty
+        if (country != null && !country.isEmpty()) {
+            filter = Filters.and(filter, Filters.eq("location", country));
+        }
+
+        long total = collection.countDocuments(filter);
 
         List<Bson> aggregationPipeline = Arrays.asList(
-                new Document("$match", textSearchQuery),
+                new Document("$match", filter),
                 new Document("$skip", pageable.getOffset()),
                 new Document("$limit", pageable.getPageSize())
         );
@@ -51,4 +60,6 @@ public class JobSearchRepositoryImpl implements JobSearchRepository {
 
         return new PageImpl<>(posts, pageable, total);
     }
+
+
 }
