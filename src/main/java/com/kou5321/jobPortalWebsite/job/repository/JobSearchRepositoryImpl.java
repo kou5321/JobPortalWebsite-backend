@@ -28,7 +28,7 @@ public class JobSearchRepositoryImpl implements JobSearchRepository {
     @Autowired
     MongoConverter converter;
 
-    public Page<JobPosting> findByTextAndCountry(String text, String country, Pageable pageable) {
+    public Page<JobPosting> findByTextAndCountry(String text, String country, Integer maxYearsOfExperience, Pageable pageable) {
         List<JobPosting> posts = new ArrayList<>();
 
         MongoDatabase database = client.getDatabase("jobListing");
@@ -39,6 +39,10 @@ public class JobSearchRepositoryImpl implements JobSearchRepository {
         // Add text search condition if text is provided and not empty
         if (text != null && !text.isEmpty()) {
             filter = Filters.and(filter, new Document("$text", new Document("$search", text)));
+        }
+
+        if (maxYearsOfExperience != null) {
+            filter = Filters.and(filter, Filters.lte("yoe", maxYearsOfExperience));
         }
 
         // Add country filter condition if country is provided and not empty

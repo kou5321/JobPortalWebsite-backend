@@ -56,9 +56,10 @@ public class JobPostingController {
             @RequestParam(required = false, defaultValue = "") String text,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
-            @RequestParam(required = false) String country) {
+            @RequestParam(required = false) String country,
+            @RequestParam(required = false) Integer maxYearsOfExperience) {
         Pageable pageable = PageRequest.of(page, size);
-        return jobSearchRepository.findByTextAndCountry(text, country, pageable);
+        return jobSearchRepository.findByTextAndCountry(text, country, maxYearsOfExperience, pageable);
     }
 
     @GetMapping("/findJobById/{id}")

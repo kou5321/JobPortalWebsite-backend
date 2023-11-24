@@ -21,7 +21,7 @@ public class JobPosting {
     @TextIndexed
     private String title;
     @TextIndexed
-    private String yoe;
+    private int yoe;
     private String date_added;
     @TextIndexed
     private String location;
