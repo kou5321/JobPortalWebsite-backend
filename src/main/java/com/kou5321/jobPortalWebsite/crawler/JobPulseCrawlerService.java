@@ -31,7 +31,7 @@ public class JobPulseCrawlerService {
     // executed every 6 hours
 //    @Scheduled(cron = "0 0 */6 * * ?")
     public void fetchAndSaveJobPostings() {
-        int totalJobPostingsToFetch = 100;
+        int totalJobPostingsToFetch = 300;
         int pageSize = 20;
         int totalPages = totalJobPostingsToFetch / pageSize;
 
