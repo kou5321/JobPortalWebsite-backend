@@ -26,4 +26,9 @@ public class JobPostingService {
         jobPostings.forEach(jobPostingSet::add);
         return jobPostingSet;
     }
+
+    public long countDistinctCompanies() {
+        // Assuming the method countDistinctCompany is already defined in JobPostingRepository
+        return jobPostingRepository.countDistinctCompany();
+    }
 }

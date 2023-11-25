@@ -66,4 +66,9 @@ public class JobPostingController {
     public JobPosting getJobById(@PathVariable String id) {
         return jobPostingService.getJobPostingById(id);
     }
+
+    @PostMapping("/getCompanyNumber")
+    public long getCompanyNum() {
+        return jobPostingService.countDistinctCompanies();
+    }
 }
