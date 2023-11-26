@@ -44,13 +44,15 @@ public class SecurityConfig {
         return authProvider;
     }
 
+    // The add job post api is secured by front end
     @Bean
     DefaultSecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .addFilterBefore(corsFilter(), ChannelProcessingFilter.class)
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll(); // Permit preflight requests
-                    auth.requestMatchers("/addJobPost").hasRole("ADMIN"); // Secure /addPost endpoint for ADMIN only
+//                    auth.requestMatchers("/addJobPost").hasRole("ADMIN"); // Secure /addPost endpoint for ADMIN only
+//                    auth.requestMatchers("/addJobPost").hasAuthority("ROLE_ADMIN");
                     auth.requestMatchers("/users/register", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll(); // Permit access to registration and Swagger UI
                     auth.anyRequest().permitAll(); // All other requests are publicly accessible
                 })
