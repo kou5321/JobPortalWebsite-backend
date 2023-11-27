@@ -4,9 +4,13 @@ import com.kou5321.jobPortalWebsite.job.model.JobPosting;
 import com.kou5321.jobPortalWebsite.user.dto.LoginRequest;
 import com.kou5321.jobPortalWebsite.user.dto.SignUpRequest;
 import com.kou5321.jobPortalWebsite.user.dto.UserLoginResponse;
+import com.kou5321.jobPortalWebsite.user.entity.EmailSubscription;
 import com.kou5321.jobPortalWebsite.user.entity.User;
+import com.kou5321.jobPortalWebsite.user.repository.EmailSubscriptionRepository;
 import com.kou5321.jobPortalWebsite.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +25,12 @@ import java.util.UUID;
 //@CrossOrigin(origins = "http://localhost:3000")
 @CrossOrigin(origins = "*")
 @RequestMapping("/users") // Added a request mapping to set a base path for all endpoints in this controller
+@Slf4j
 public class UserController {
     private final UserService userService;
+
+    @Autowired
+    private EmailSubscriptionRepository emailSubscriptionRepository;
 
     @PostMapping("/register")
     public ResponseEntity<User> signUp(@RequestBody SignUpRequest request) {
@@ -83,7 +91,32 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(userInfo);
     }
 
-    // TODO: consider add subscribe/unsubscribe email notification
+    @PostMapping("/subscribe-job-alert")
+    public ResponseEntity<?> subscribeJobAlert(@RequestParam String email) {
+        try {
+            if (!emailSubscriptionRepository.existsByEmail(email)) {
+                EmailSubscription newSubscription = new EmailSubscription();
+                newSubscription.setEmail(email);
+                emailSubscriptionRepository.save(newSubscription);
+                return ResponseEntity.ok("Subscribed successfully");
+            } else {
+                return ResponseEntity.badRequest().body("Email already subscribed");
+            }
+        } catch (Exception e) {
+            log.error("Error subscribing email: " + email, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error subscribing");
+        }
+    }
 
-    // TODO: add session-based logout api
+
+    @DeleteMapping("/unsubscribe-job-alert")
+    public ResponseEntity<?> unsubscribeJobAlert(@RequestParam String email) {
+        if (emailSubscriptionRepository.existsByEmail(email)) {
+            emailSubscriptionRepository.deleteByEmail(email);
+            return ResponseEntity.ok("Unsubscribed successfully");
+        } else {
+            return ResponseEntity.badRequest().body("Email not found");
+        }
+    }
+
 }

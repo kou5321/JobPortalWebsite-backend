@@ -35,3 +35,8 @@ CREATE TABLE user_roles (
                             role_id BIGINT REFERENCES roles(id),
                             PRIMARY KEY (user_id, role_id)
 );
+
+CREATE TABLE email_subscriptions (
+                                     id SERIAL PRIMARY KEY,
+                                     email VARCHAR(255) NOT NULL UNIQUE
+);
