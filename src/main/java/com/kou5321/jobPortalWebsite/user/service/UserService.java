@@ -1,5 +1,6 @@
 package com.kou5321.jobPortalWebsite.user.service;
 
+import com.kou5321.jobPortalWebsite.email.service.EmailService;
 import com.kou5321.jobPortalWebsite.job.model.JobPosting;
 import com.kou5321.jobPortalWebsite.job.repository.JobPostingRepository;
 import com.kou5321.jobPortalWebsite.security.JwtTokenProvider;
@@ -14,7 +15,6 @@ import com.kou5321.jobPortalWebsite.user.repository.SubscriptionPreferenceReposi
 import com.kou5321.jobPortalWebsite.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -34,6 +35,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     @Autowired
     private final RoleRepository roleRepository;
+    @Autowired
+    private EmailService emailService;
     @Autowired
     private final JobPostingRepository jobPostingRepository;
     @Autowired
@@ -172,4 +175,30 @@ public class UserService {
         user.getSubscriptionPreferences().clear();
         userRepository.save(user);
     }
+    public void sendJobAlertsToSubscribedUsers() {
+        List<User> users = userRepository.findAll();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy"); // Format to match the date part
+        String today = sdf.format(new Date());
+        String dateRegex = "^" + today;
+        for (User user : users) {
+            user.getSubscriptionPreferences().forEach(preference -> {
+                List<JobPosting> jobPostings = jobPostingRepository.findByDateLocationAndYoe(
+                        dateRegex, preference.getPreferredLocation(), preference.getPreferredYear());
+                String emailContent = buildEmailContent(jobPostings);
+                emailService.sendEmail(user.getEmail(), "Job Alerts", emailContent);
+            });
+        }
+    }
+
+    private String buildEmailContent(List<JobPosting> jobPostings) {
+        StringBuilder content = new StringBuilder();
+        for (JobPosting job : jobPostings) {
+            content.append("Title: ").append(job.getTitle())
+                    .append(", Company: ").append(job.getCompany())
+                    // ... other job details ...
+                    .append("\n\n");
+        }
+        return content.toString();
+    }
+
 }
