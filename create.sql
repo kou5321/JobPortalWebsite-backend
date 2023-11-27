@@ -1,38 +1,50 @@
--- Create the main users table
+CREATE TABLE roles (
+                       id BIGSERIAL PRIMARY KEY,
+                       name VARCHAR(20)
+);
+
 CREATE TABLE users (
-                       id UUID PRIMARY KEY,
+                       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                        email VARCHAR(30) NOT NULL UNIQUE,
                        password VARCHAR(200) NOT NULL,
                        username VARCHAR(30) NOT NULL UNIQUE
 );
 
--- Create a table for applied job postings (one-to-many relationship table)
-CREATE TABLE user_applied_job_postings (
-                                           user_id UUID NOT NULL,
-                                           job_posting_id VARCHAR NOT NULL,
-                                           CONSTRAINT fk_user
-                                               FOREIGN KEY(user_id)
-                                                   REFERENCES users(id)
-                                                   ON DELETE CASCADE
-);
-
--- Create a table for viewed job postings (one-to-many relationship table)
-CREATE TABLE user_viewed_job_postings (
-                                          user_id UUID NOT NULL,
-                                          job_posting_id VARCHAR NOT NULL,
-                                          CONSTRAINT fk_user_viewed
-                                              FOREIGN KEY(user_id)
-                                                  REFERENCES users(id)
-                                                  ON DELETE CASCADE
-);
-
--- Create a table for user_applied entity
 CREATE TABLE user_applied (
                               id UUID PRIMARY KEY,
-                              user_id UUID NOT NULL,
-                              job_posting_id VARCHAR NOT NULL,
-                              CONSTRAINT fk_user_applied
-                                  FOREIGN KEY(user_id)
-                                      REFERENCES users(id)
-                                      ON DELETE CASCADE
+                              user_id UUID REFERENCES users(id),
+                              job_posting_id VARCHAR NOT NULL
 );
+
+CREATE TABLE user_applied_job_postings (
+                                           user_id UUID REFERENCES users(id),
+                                           job_posting_id VARCHAR NOT NULL,
+                                           PRIMARY KEY (user_id, job_posting_id)
+);
+
+
+CREATE TABLE user_viewed_job_postings (
+                                          user_id UUID REFERENCES users(id),
+                                          job_posting_id VARCHAR NOT NULL,
+                                          PRIMARY KEY (user_id, job_posting_id)
+);
+
+
+CREATE TABLE user_roles (
+                            user_id UUID REFERENCES users(id),
+                            role_id BIGINT REFERENCES roles(id),
+                            PRIMARY KEY (user_id, role_id)
+);
+
+CREATE TABLE email_subscriptions (
+                                     id SERIAL PRIMARY KEY,
+                                     email VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE subscription_preferences (
+                                          id SERIAL PRIMARY KEY,
+                                          preferred_year INT,
+                                          preferred_location VARCHAR(255),
+                                          user_id UUID REFERENCES users(id)
+);
+

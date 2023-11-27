@@ -81,4 +81,15 @@ public class JobPostingController {
         String dateRegex = "^" + today; // Regex to match the beginning of the string
         return jobPostingRepository.findJobPostingsByDateAdded(dateRegex);
     }
+
+
+    @GetMapping("/getJobPostsBySubscription")
+    public List<JobPosting> getJobPostsBySubscription(
+            @RequestParam String location,
+            @RequestParam int preferredYear) {
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy"); // Format to match the date part
+        String today = sdf.format(new Date());
+        String dateRegex = "^" + today; // Regex to match the beginning of the string
+        return jobPostingRepository.findByDateLocationAndYoe(dateRegex, location, preferredYear);
+    }
 }

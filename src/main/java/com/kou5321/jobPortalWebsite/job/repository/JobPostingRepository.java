@@ -20,4 +20,7 @@ public interface JobPostingRepository extends MongoRepository<JobPosting, String
 
     @Query(value = "{'date_added': {$regex: ?0, $options: 'i'}}")
     List<JobPosting> findJobPostingsByDateAdded(String dateRegex);
+
+    @Query("{'date_added': {$regex: ?0, $options: 'i'}, 'location': ?1, 'yoe': {$lte: ?2}}")
+    List<JobPosting> findByDateLocationAndYoe(String dateRegex, String location, int yoe);
 }

@@ -5,8 +5,8 @@ import com.kou5321.jobPortalWebsite.user.dto.LoginRequest;
 import com.kou5321.jobPortalWebsite.user.dto.SignUpRequest;
 import com.kou5321.jobPortalWebsite.user.dto.UserLoginResponse;
 import com.kou5321.jobPortalWebsite.user.entity.EmailSubscription;
+import com.kou5321.jobPortalWebsite.user.entity.SubscriptionPreference;
 import com.kou5321.jobPortalWebsite.user.entity.User;
-import com.kou5321.jobPortalWebsite.user.repository.EmailSubscriptionRepository;
 import com.kou5321.jobPortalWebsite.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,9 +28,6 @@ import java.util.UUID;
 @Slf4j
 public class UserController {
     private final UserService userService;
-
-    @Autowired
-    private EmailSubscriptionRepository emailSubscriptionRepository;
 
     @PostMapping("/register")
     public ResponseEntity<User> signUp(@RequestBody SignUpRequest request) {
@@ -91,31 +88,33 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(userInfo);
     }
 
-    @PostMapping("/subscribe-job-alert")
-    public ResponseEntity<?> subscribeJobAlert(@RequestParam String email) {
+    @PostMapping("/subscribe")
+    public ResponseEntity<?> subscribe(
+            @RequestParam String username,
+            @RequestParam String preferredLocation,
+            @RequestParam int preferredYear) {
         try {
-            if (!emailSubscriptionRepository.existsByEmail(email)) {
-                EmailSubscription newSubscription = new EmailSubscription();
-                newSubscription.setEmail(email);
-                emailSubscriptionRepository.save(newSubscription);
-                return ResponseEntity.ok("Subscribed successfully");
-            } else {
-                return ResponseEntity.badRequest().body("Email already subscribed");
-            }
+            User user = userService.getUserByUsername(username);
+            SubscriptionPreference preference = new SubscriptionPreference();
+            preference.setPreferredLocation(preferredLocation);
+            preference.setPreferredYear(preferredYear);
+            userService.addSubscriptionPreference(user, preference);
+            return ResponseEntity.ok("Subscribed successfully");
         } catch (Exception e) {
-            log.error("Error subscribing email: " + email, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error subscribing");
+            log.error("Error in subscribing user: " + username, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in subscription process");
         }
     }
 
-
-    @DeleteMapping("/unsubscribe-job-alert")
-    public ResponseEntity<?> unsubscribeJobAlert(@RequestParam String email) {
-        if (emailSubscriptionRepository.existsByEmail(email)) {
-            emailSubscriptionRepository.deleteByEmail(email);
+    @DeleteMapping("/unsubscribe")
+    public ResponseEntity<?> unsubscribe(@RequestParam String username) {
+        try {
+            User user = userService.getUserByUsername(username);
+            userService.removeAllSubscriptionPreferences(user);
             return ResponseEntity.ok("Unsubscribed successfully");
-        } else {
-            return ResponseEntity.badRequest().body("Email not found");
+        } catch (Exception e) {
+            log.error("Error in unsubscribing user: " + username, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in unsubscription process");
         }
     }
 

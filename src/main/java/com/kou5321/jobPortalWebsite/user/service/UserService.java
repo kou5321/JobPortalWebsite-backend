@@ -7,8 +7,10 @@ import com.kou5321.jobPortalWebsite.user.dto.LoginRequest;
 import com.kou5321.jobPortalWebsite.user.dto.SignUpRequest;
 import com.kou5321.jobPortalWebsite.user.dto.UserLoginResponse;
 import com.kou5321.jobPortalWebsite.user.entity.Role;
+import com.kou5321.jobPortalWebsite.user.entity.SubscriptionPreference;
 import com.kou5321.jobPortalWebsite.user.entity.User;
 import com.kou5321.jobPortalWebsite.user.repository.RoleRepository;
+import com.kou5321.jobPortalWebsite.user.repository.SubscriptionPreferenceRepository;
 import com.kou5321.jobPortalWebsite.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,8 @@ public class UserService {
     private final RoleRepository roleRepository;
     @Autowired
     private final JobPostingRepository jobPostingRepository;
+    @Autowired
+    private final SubscriptionPreferenceRepository subscriptionPreferenceRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
 
@@ -154,4 +158,18 @@ public class UserService {
         return new UserLoginResponse(jwt, user);
     }
 
+    @Transactional
+    public void addSubscriptionPreference(User user, SubscriptionPreference preference) {
+        removeAllSubscriptionPreferences(user);
+
+        preference.setUser(user);
+        user.getSubscriptionPreferences().add(preference);
+        subscriptionPreferenceRepository.save(preference);
+    }
+
+    @Transactional
+    public void removeAllSubscriptionPreferences(User user) {
+        user.getSubscriptionPreferences().clear();
+        userRepository.save(user);
+    }
 }
