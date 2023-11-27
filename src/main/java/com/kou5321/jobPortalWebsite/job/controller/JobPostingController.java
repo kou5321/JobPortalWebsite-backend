@@ -15,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -70,5 +72,13 @@ public class JobPostingController {
     @PostMapping("/getCompanyNumber")
     public long getCompanyNum() {
         return jobPostingService.countDistinctCompanies();
+    }
+
+    @GetMapping("/getJobPostsToday")
+    public List<JobPosting> getJobPostsToday() {
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy"); // Format to match the date part
+        String today = sdf.format(new Date());
+        String dateRegex = "^" + today; // Regex to match the beginning of the string
+        return jobPostingRepository.findJobPostingsByDateAdded(dateRegex);
     }
 }
