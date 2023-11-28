@@ -1,4 +1,4 @@
-package com.kou5321.jobPortalWebsite.email.component;
+package com.kou5321.jobPortalWebsite.email.controller;
 
 import com.kou5321.jobPortalWebsite.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

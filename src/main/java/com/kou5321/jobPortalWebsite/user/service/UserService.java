@@ -185,7 +185,8 @@ public class UserService {
                 List<JobPosting> jobPostings = jobPostingRepository.findByDateLocationAndYoe(
                         dateRegex, preference.getPreferredLocation(), preference.getPreferredYear());
                 String emailContent = buildEmailContent(jobPostings);
-                emailService.sendEmail(user.getEmail(), "Job Alerts", emailContent);
+                emailService.sendEmail(user.getEmail(), "Job Alerts", "Here is today's new job post: \n"
+                        + emailContent);
             });
         }
     }
@@ -195,7 +196,8 @@ public class UserService {
         for (JobPosting job : jobPostings) {
             content.append("Title: ").append(job.getTitle())
                     .append(", Company: ").append(job.getCompany())
-                    // ... other job details ...
+                    .append(", yoe: ").append(job.getYoe())
+                    .append(", apply link: ").append(job.getApply_link())
                     .append("\n\n");
         }
         return content.toString();

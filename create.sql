@@ -48,3 +48,6 @@ CREATE TABLE subscription_preferences (
                                           user_id UUID REFERENCES users(id)
 );
 
+INSERT INTO users (email, username, password) VALUES ('ykou@ur.rochester.edu', 'root', '$2a$10$FhB4YizdMvDv2UOVniUEI.ARt.SOMqmvwvB0om8nyfD1WeIv0Mdmi');
+INSERT INTO user_roles (user_id, role_id) VALUES ('24329298-0d77-4269-867a-8bda69d2d53e', 1); # this should be user_id
+
