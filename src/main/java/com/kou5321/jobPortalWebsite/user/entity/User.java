@@ -2,6 +2,7 @@ package com.kou5321.jobPortalWebsite.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -38,6 +39,7 @@ public class User {
     @Column(name = "job_posting_id")
     private Set<String> viewedJobPostingsIds = new HashSet<>();
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
