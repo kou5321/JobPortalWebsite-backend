@@ -4,13 +4,11 @@ import com.kou5321.jobPortalWebsite.job.model.JobPosting;
 import com.kou5321.jobPortalWebsite.user.dto.LoginRequest;
 import com.kou5321.jobPortalWebsite.user.dto.SignUpRequest;
 import com.kou5321.jobPortalWebsite.user.dto.UserLoginResponse;
-import com.kou5321.jobPortalWebsite.user.entity.EmailSubscription;
 import com.kou5321.jobPortalWebsite.user.entity.SubscriptionPreference;
 import com.kou5321.jobPortalWebsite.user.entity.User;
 import com.kou5321.jobPortalWebsite.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 //@CrossOrigin(origins = "http://localhost:3000")
 @CrossOrigin(origins = "*")
-@RequestMapping("/users") // Added a request mapping to set a base path for all endpoints in this controller
+@RequestMapping("/users")
 @Slf4j
 public class UserController {
     private final UserService userService;

@@ -31,6 +31,7 @@ public class JobPostingController {
 
     @RequestMapping("/")
     @Hidden
+    // TODO: @Hidden annotation should be removed when deployment
     public void redirect(HttpServletResponse response) throws IOException {
         response.sendRedirect("/" +
                 "swagger-ui.html");
