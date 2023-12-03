@@ -7,6 +7,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,10 @@ import java.util.List;
 
 @Repository
 @Slf4j
+@RequiredArgsConstructor
 public class JobSearchRepositoryImpl implements JobSearchRepository {
-    @Autowired
-    MongoClient client;
-    @Autowired
-    MongoConverter converter;
+    private final MongoClient client;
+    private final MongoConverter converter;
 
     public Page<JobPosting> findByTextAndCountry(String text, String country, Integer maxYearsOfExperience, Pageable pageable) {
         List<JobPosting> posts = new ArrayList<>();

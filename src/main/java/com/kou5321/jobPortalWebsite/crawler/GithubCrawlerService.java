@@ -17,7 +17,6 @@ import org.jsoup.select.Elements;
 @Service
 @EnableScheduling
 public class GithubCrawlerService {
-    private static final String GITHUB_URL = "https://raw.githubusercontent.com/ReaVNaiL/New-Grad-2024/main/README.md";
 
     @Autowired
     private JobPostingRepository jobPostingRepository;
