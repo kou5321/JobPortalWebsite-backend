@@ -6,8 +6,8 @@ import com.kou5321.jobPortalWebsite.job.repository.JobSearchRepositoryImpl;
 import com.kou5321.jobPortalWebsite.job.service.JobPostingService;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,13 +23,11 @@ import java.util.List;
 //@CrossOrigin(origins = "http://localhost:3000")
 @CrossOrigin(origins = "*")
 @Slf4j
+@RequiredArgsConstructor
 public class JobPostingController {
-    @Autowired
-    JobPostingRepository jobPostingRepository;
-    @Autowired
-    JobSearchRepositoryImpl jobSearchRepository;
-    @Autowired
-    JobPostingService jobPostingService;
+    private final JobPostingRepository jobPostingRepository;
+    private final JobSearchRepositoryImpl jobSearchRepository;
+    private final JobPostingService jobPostingService;
 
     @RequestMapping("/")
     @Hidden

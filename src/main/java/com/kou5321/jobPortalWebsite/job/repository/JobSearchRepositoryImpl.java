@@ -35,21 +35,7 @@ public class JobSearchRepositoryImpl implements JobSearchRepository {
         MongoDatabase database = client.getDatabase("jobListing");
         MongoCollection<Document> collection = database.getCollection("JobCrawler");
 
-        Bson filter = new Document();
-
-        // Add text search condition if text is provided and not empty
-        if (text != null && !text.isEmpty()) {
-            filter = Filters.and(filter, new Document("$text", new Document("$search", text)));
-        }
-
-        if (maxYearsOfExperience != null) {
-            filter = Filters.and(filter, Filters.lte("yoe", maxYearsOfExperience));
-        }
-
-        // Add country filter condition if country is provided and not empty
-        if (country != null && !country.isEmpty()) {
-            filter = Filters.and(filter, Filters.eq("location", country));
-        }
+        Bson filter = getBson(text, country, maxYearsOfExperience);
 
         long total = collection.countDocuments(filter);
 
@@ -68,6 +54,25 @@ public class JobSearchRepositoryImpl implements JobSearchRepository {
         result.forEach(doc -> posts.add(converter.read(JobPosting.class, doc)));
 
         return new PageImpl<>(posts, pageable, total);
+    }
+
+    private static Bson getBson(String text, String country, Integer maxYearsOfExperience) {
+        Bson filter = new Document();
+
+        // Add text search condition if text is provided and not empty
+        if (text != null && !text.isEmpty()) {
+            filter = Filters.and(filter, new Document("$text", new Document("$search", text)));
+        }
+
+        if (maxYearsOfExperience != null) {
+            filter = Filters.and(filter, Filters.lte("yoe", maxYearsOfExperience));
+        }
+
+        // Add country filter condition if country is provided and not empty
+        if (country != null && !country.isEmpty()) {
+            filter = Filters.and(filter, Filters.eq("location", country));
+        }
+        return filter;
     }
 
 
