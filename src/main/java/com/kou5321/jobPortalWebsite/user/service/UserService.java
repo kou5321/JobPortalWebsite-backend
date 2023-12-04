@@ -14,7 +14,6 @@ import com.kou5321.jobPortalWebsite.user.repository.RoleRepository;
 import com.kou5321.jobPortalWebsite.user.repository.SubscriptionPreferenceRepository;
 import com.kou5321.jobPortalWebsite.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,17 +28,11 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    @Autowired
     private final UserRepository userRepository;
-    @Autowired
     private final PasswordEncoder passwordEncoder;
-    @Autowired
     private final RoleRepository roleRepository;
-    @Autowired
-    private EmailService emailService;
-    @Autowired
+    private final EmailService emailService;
     private final JobPostingRepository jobPostingRepository;
-    @Autowired
     private final SubscriptionPreferenceRepository subscriptionPreferenceRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
@@ -105,17 +98,12 @@ public class UserService {
 
     @Transactional
     public void markViewedJobPosting(User user, String jobPostingId) {
-        // TODO: also check if jobPostingId exists in the JobPostingRepository like in markAppliedJobPosting
+        jobPostingRepository.findById(jobPostingId).orElseThrow(
+                () -> new IllegalArgumentException("Job Posting not found with ID: " + jobPostingId)
+        );
         user.getViewedJobPostingsIds().add(jobPostingId);
         userRepository.save(user);
     }
-
-    // not useful for business logic
-//    @Transactional
-//    public void unmarkViewedJobPosting(User user, String jobPostingId) {
-//        user.getViewedJobPostingsIds().remove(jobPostingId);
-//        userRepository.save(user);
-//    }
 
     @Transactional(readOnly = true)
     public Set<JobPosting> getUserViewedJobPostings(UUID userId) {
@@ -147,6 +135,7 @@ public class UserService {
     }
 
     // In UserService
+    @Transactional
     public UserLoginResponse login(LoginRequest request) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
