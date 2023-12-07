@@ -1,12 +1,14 @@
 > ### **Java 21 + Spring Boot 3** codebase containing real-world examples for a job portal website (job posting crawling, user authentication, job application tracking, etc) that adheres to good design and coding practices.
 
-### [Demo](#)&nbsp;&nbsp;&nbsp;&nbsp;[Documentation](#)
+### [Demo](http://ec2-54-81-27-106.compute-1.amazonaws.com:8080/)&nbsp;&nbsp;&nbsp;&nbsp;
 
 This codebase was created to demonstrate a fully fledged fullstack application built with **Java 21 + Spring Boot 3** including features like job postings, user authentication, authorization, and more.
 
-We've gone to great lengths to adhere to the **Java 21 + Spring Boot 3** community styleguide & best practices.
+I've gone to great lengths to adhere to the **Java 21 + Spring Boot 3** community styleguide & best practices.
 
-It utilizes MongoDB to store jobPosting data and PostgreSQL to store user information.
+It utilizes MongoDB to store jobPosting data and PostgreSQL to store user information, JWT token based authentication.
+
+For the authorization part, the default user's identity "USER" and it has the admin user's identity is "ADMIN". With admin right, you can access add job post page.
 
 The front end part is available at https://github.com/kou5321/JobPortalWebsite-frontend
 
@@ -52,7 +54,7 @@ Access the application at http://localhost:8080.
 Packages
 - com.kou5321.jobPortalWebsite.job - Contains controllers, services, and repositories for job-related operations.
 - com.kou5321.jobPortalWebsite.user - Manages user registration, authentication, and profile operations.
-- com.kou5321.jobPortalWebsite.security - Configuration for security, CORS, and other application settings.
+- com.kou5321.jobPortalWebsite.security - Configuration for security, CORS, JWT and other application settings.
 Classes
 - JobPostingController - Endpoints for job posting CRUD operations.
 - UserController - Endpoints for user authentication and management.
