@@ -32,7 +32,9 @@ public class JobSearchRepositoryImpl implements JobSearchRepository {
     public Page<JobPosting> findByTextAndCountry(String text, String country, Integer maxYearsOfExperience, Pageable pageable) {
         List<JobPosting> posts = new ArrayList<>();
 
-        MongoDatabase database = client.getDatabase("jobListing");
+//        MongoDatabase database = client.getDatabase("jobListing");
+//        MongoCollection<Document> collection = database.getCollection("JobCrawler");
+        MongoDatabase database = client.getDatabase("Cluster1");
         MongoCollection<Document> collection = database.getCollection("JobCrawler");
 
         Bson filter = getBson(text, country, maxYearsOfExperience);
