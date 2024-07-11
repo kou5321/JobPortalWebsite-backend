@@ -14,6 +14,7 @@ import com.kou5321.jobPortalWebsite.user.repository.RoleRepository;
 import com.kou5321.jobPortalWebsite.user.repository.SubscriptionPreferenceRepository;
 import com.kou5321.jobPortalWebsite.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,6 +29,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -37,7 +39,7 @@ public class UserService {
     private final SubscriptionPreferenceRepository subscriptionPreferenceRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
-    private final RedisTemplate redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Transactional
     public User signUp(SignUpRequest request) {
@@ -60,22 +62,27 @@ public class UserService {
 
     @Transactional
     public UserLoginResponse login(LoginRequest request) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.username(),
-                        request.password()
-                )
-        );
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.username(),
+                            request.password()
+                    )
+            );
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenProvider.generateToken(authentication);
-        User user = getUserByUsername(request.username());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = tokenProvider.generateToken(authentication);
+            User user = getUserByUsername(request.username());
 
-        // 将用户会话信息存储到Redis
-        String sessionId = UUID.randomUUID().toString();
-        redisTemplate.opsForValue().set(sessionId, user);
+            // persist userinfo to redis
+            String sessionId = "user:" + user.getId().toString();
+            redisTemplate.opsForValue().set(sessionId, user);
 
-        return new UserLoginResponse(jwt, user);
+            return new UserLoginResponse(jwt, user);
+        } catch (Exception e) {
+            log.error("Login failed for user: " + request.username(), e);
+            throw new RuntimeException("Login failed", e);
+        }
     }
 
     @Transactional

@@ -35,8 +35,12 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        UserLoginResponse response = userService.login(request);
-        return ResponseEntity.ok(response);
+        try {
+            UserLoginResponse response = userService.login(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Login failed: " + e.getMessage());
+        }
     }
 
     @PostMapping("/{userId}/mark-applied-job")
