@@ -14,6 +14,7 @@ import com.kou5321.jobPortalWebsite.user.repository.RoleRepository;
 import com.kou5321.jobPortalWebsite.user.repository.SubscriptionPreferenceRepository;
 import com.kou5321.jobPortalWebsite.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,6 +37,7 @@ public class UserService {
     private final SubscriptionPreferenceRepository subscriptionPreferenceRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
+    private final RedisTemplate redisTemplate;
 
     @Transactional
     public User signUp(SignUpRequest request) {
@@ -56,13 +58,25 @@ public class UserService {
                 .orElseThrow(() -> new IllegalStateException("User role not found."));
     }
 
-//    @Transactional(readOnly = true)
-//    public User login(LoginRequest request) {
-//        return userRepository
-//                .findByUsername(request.username())
-//                .filter(user -> passwordEncoder.matches(request.password(), user.getPassword()))
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid name or password."));
-//    }
+    @Transactional
+    public UserLoginResponse login(LoginRequest request) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.username(),
+                        request.password()
+                )
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = tokenProvider.generateToken(authentication);
+        User user = getUserByUsername(request.username());
+
+        // 将用户会话信息存储到Redis
+        String sessionId = UUID.randomUUID().toString();
+        redisTemplate.opsForValue().set(sessionId, user);
+
+        return new UserLoginResponse(jwt, user);
+    }
 
     @Transactional
     public void markAppliedJobPosting(User user, String jobPostingId) {
@@ -73,6 +87,10 @@ public class UserService {
         if (!user.getAppliedJobPostingsIds().contains(jobPostingId)) {
             user.getAppliedJobPostingsIds().add(jobPostingId);
             userRepository.save(user);
+
+            // update user session information
+            String sessionId = "user:" + user.getId().toString();
+            redisTemplate.opsForValue().set(sessionId, user);
         }
     }
 
@@ -85,6 +103,10 @@ public class UserService {
         if (user.getAppliedJobPostingsIds().contains(jobPostingId)) {
             user.getAppliedJobPostingsIds().remove(jobPostingId);
             userRepository.save(user);
+
+            // update user session information
+            String sessionId = "user:" + user.getId().toString();
+            redisTemplate.opsForValue().set(sessionId, user);
         }
     }
 
@@ -103,6 +125,9 @@ public class UserService {
         );
         user.getViewedJobPostingsIds().add(jobPostingId);
         userRepository.save(user);
+        // update user session information
+        String sessionId = "user:" + user.getId().toString();
+        redisTemplate.opsForValue().set(sessionId, user);
     }
 
     @Transactional(readOnly = true)
@@ -115,8 +140,15 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User getUserById(UUID userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+        String sessionId = "user:" + userId.toString();
+        User user = (User) redisTemplate.opsForValue().get(sessionId);
+        if (user == null) {
+            user = userRepository.findById(userId)
+                    .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+            // persist user information to redis
+            redisTemplate.opsForValue().set(sessionId, user);
+        }
+        return user;
     }
 
     @Transactional(readOnly = true)
@@ -134,22 +166,6 @@ public class UserService {
         }
     }
 
-    // In UserService
-    @Transactional
-    public UserLoginResponse login(LoginRequest request) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.username(),
-                        request.password()
-                )
-        );
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenProvider.generateToken(authentication);
-        User user = getUserByUsername(request.username());
-        return new UserLoginResponse(jwt, user);
-    }
-
     @Transactional
     public void addSubscriptionPreference(User user, SubscriptionPreference preference) {
         removeAllSubscriptionPreferences(user);
@@ -157,12 +173,20 @@ public class UserService {
         preference.setUser(user);
         user.getSubscriptionPreferences().add(preference);
         subscriptionPreferenceRepository.save(preference);
+
+        // update user session info to redis
+        String sessionId = "user:" + user.getId().toString();
+        redisTemplate.opsForValue().set(sessionId, user);
     }
 
     @Transactional
     public void removeAllSubscriptionPreferences(User user) {
         user.getSubscriptionPreferences().clear();
         userRepository.save(user);
+
+        // update user session info to redis
+        String sessionId = "user:" + user.getId().toString();
+        redisTemplate.opsForValue().set(sessionId, user);
     }
     public void sendJobAlertsToSubscribedUsers() {
         List<User> users = userRepository.findAll();
