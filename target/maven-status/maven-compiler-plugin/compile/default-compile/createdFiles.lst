@@ -7,6 +7,7 @@ com/kou5321/jobPortalWebsite/job/service/JobPostingService.class
 com/kou5321/jobPortalWebsite/crawler/JobPulseCrawlerService$1.class
 com/kou5321/jobPortalWebsite/JobPortalWebsiteApplication.class
 com/kou5321/jobPortalWebsite/user/repository/UserRepository.class
+com/kou5321/jobPortalWebsite/deployConfig/ForwardingController.class
 com/kou5321/jobPortalWebsite/crawler/CrawlerController.class
 com/kou5321/jobPortalWebsite/security/JwtTokenProvider.class
 com/kou5321/jobPortalWebsite/crawler/GithubCrawlerService.class
@@ -15,13 +16,11 @@ com/kou5321/jobPortalWebsite/email/controller/AdminController.class
 com/kou5321/jobPortalWebsite/user/dto/JwtAuthenticationResponse.class
 com/kou5321/jobPortalWebsite/job/model/JobPosting.class
 com/kou5321/jobPortalWebsite/job/config/MongoConfig.class
-com/kou5321/jobPortalWebsite/user/entity/EmailSubscription.class
 com/kou5321/jobPortalWebsite/job/repository/JobPostingRepository.class
 com/kou5321/jobPortalWebsite/security/SecurityConfig.class
 com/kou5321/jobPortalWebsite/user/service/UserService.class
 com/kou5321/jobPortalWebsite/crawler/JobPulseCrawlerService.class
 com/kou5321/jobPortalWebsite/user/entity/User$UserBuilder.class
-com/kou5321/jobPortalWebsite/user/entity/UserApplied.class
 com/kou5321/jobPortalWebsite/user/service/UserDetailsServiceImpl.class
 com/kou5321/jobPortalWebsite/job/repository/JobSearchRepository.class
 com/kou5321/jobPortalWebsite/job/repository/JobSearchRepositoryImpl.class
@@ -30,6 +29,5 @@ com/kou5321/jobPortalWebsite/security/CustomUserPrincipal.class
 com/kou5321/jobPortalWebsite/user/entity/SubscriptionPreference.class
 com/kou5321/jobPortalWebsite/security/JwtTokenFilter.class
 com/kou5321/jobPortalWebsite/user/repository/SubscriptionPreferenceRepository.class
-com/kou5321/jobPortalWebsite/job/model/JobPulseResponse.class
 com/kou5321/jobPortalWebsite/user/entity/Role.class
 com/kou5321/jobPortalWebsite/email/service/EmailService.class
