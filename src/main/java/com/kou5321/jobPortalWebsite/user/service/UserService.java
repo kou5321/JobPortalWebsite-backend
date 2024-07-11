@@ -75,6 +75,7 @@ public class UserService {
             User user = getUserByUsername(request.username());
 
             // persist userinfo to redis
+            // TODO：directly add session id equals user id will be dangerous, add encryption!!
             String sessionId = "user:" + user.getId().toString();
             redisTemplate.opsForValue().set(sessionId, user);
 
