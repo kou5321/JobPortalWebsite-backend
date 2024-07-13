@@ -7,10 +7,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class CrawlerController {
-    @Autowired
-    GithubCrawlerService githubCrawlerService;
-    @Autowired
-    JobPulseCrawlerService jobPulseCrawlerService;
+    private final GithubCrawlerService githubCrawlerService;
+    private final JobPulseCrawlerService jobPulseCrawlerService;
+    private final LinkedInCrawlerService linkedInCrawlerService;
+
+    public CrawlerController(GithubCrawlerService githubCrawlerService, JobPulseCrawlerService jobPulseCrawlerService, LinkedInCrawlerService linkedInCrawlerService) {
+        this.githubCrawlerService = githubCrawlerService;
+        this.jobPulseCrawlerService = jobPulseCrawlerService;
+        this.linkedInCrawlerService = linkedInCrawlerService;
+    }
+
+    @GetMapping("/linkedinCrawler")
+    public ResponseEntity<String> linkedInCrawler() {
+        linkedInCrawlerService.crawlLinkedInJobPostings();
+        return ResponseEntity.ok("LinkedIn job postings have been crawled and sent to queue.");
+    }
+
     @GetMapping("/githubCrawler")
     public ResponseEntity<String> githubCrawler() {
         githubCrawlerService.crawlGitHubJobPostings();
