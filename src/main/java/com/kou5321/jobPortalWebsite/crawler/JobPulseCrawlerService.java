@@ -4,6 +4,7 @@ import com.kou5321.jobPortalWebsite.job.model.JobPosting;
 import com.kou5321.jobPortalWebsite.job.repository.JobPostingRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -21,12 +22,14 @@ public class JobPulseCrawlerService {
     private final RestTemplate restTemplate;
     private final JobPostingRepository jobPostingRepository;
     private final ScheduledExecutorService scheduledExecutorService;
+    private final RabbitTemplate rabbitTemplate;
 
     @Autowired
-    public JobPulseCrawlerService(JobPostingRepository jobPostingRepository, ScheduledExecutorService scheduledExecutorService) {
+    public JobPulseCrawlerService(JobPostingRepository jobPostingRepository, ScheduledExecutorService scheduledExecutorService, RabbitTemplate rabbitTemplate) {
         this.restTemplate = new RestTemplate();
         this.jobPostingRepository = jobPostingRepository;
         this.scheduledExecutorService = scheduledExecutorService;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @PostConstruct
@@ -58,7 +61,8 @@ public class JobPulseCrawlerService {
                 log.info("Job postings fetched from page {}: {}", pageNumber, jobPostings);
 
                 if (jobPostings != null) {
-                    jobPostingRepository.saveAll(jobPostings);
+                    rabbitTemplate.convertAndSend("jobQueue", jobPostings);
+//                    jobPostingRepository.saveAll(jobPostings);
                 }
 
                 // Sleep between requests to avoid hitting the server too hard
