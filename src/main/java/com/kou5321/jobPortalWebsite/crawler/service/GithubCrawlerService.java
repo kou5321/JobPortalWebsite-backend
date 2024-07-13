@@ -1,4 +1,4 @@
-package com.kou5321.jobPortalWebsite.crawler;
+package com.kou5321.jobPortalWebsite.crawler.service;
 
 import com.kou5321.jobPortalWebsite.job.model.JobPosting;
 import com.kou5321.jobPortalWebsite.job.repository.JobPostingRepository;
