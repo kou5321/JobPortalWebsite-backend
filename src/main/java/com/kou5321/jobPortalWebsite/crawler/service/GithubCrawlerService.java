@@ -18,52 +18,56 @@ import org.jsoup.select.Elements;
 @EnableScheduling
 public class GithubCrawlerService {
 
-    @Autowired
-    private JobPostingRepository jobPostingRepository;
+    private final JobPostingRepository jobPostingRepository;
 
-    // executed every 6 hours
-//    @Scheduled(cron = "0 0 */6 * * ?")
+    public GithubCrawlerService(JobPostingRepository jobPostingRepository) {
+        this.jobPostingRepository = jobPostingRepository;
+    }
+
+    // 每6小时执行一次
+    @Scheduled(cron = "0 0 */6 * * ?")
     public void crawlGitHubJobPostings() {
         try {
             log.info("Deleting all existing job postings");
             jobPostingRepository.deleteAll();
 
-            // It might be good to wait for a second to ensure that delete operation has completed
+            // 等待一秒钟以确保删除操作完成
             Thread.sleep(1000);
             log.info("begin web crawler");
-            String GITHUB_URL = "https://github.com/ReaVNaiL/New-Grad-2024"; // Make sure this is the correct URL
+            String GITHUB_URL = "https://github.com/ReaVNaiL/New-Grad-2024"; // 确保这是正确的URL
             Document doc = Jsoup.connect(GITHUB_URL).get();
 
-            // Look for the table element within the HTML
+            // 查找HTML中的表格元素
             Elements jobElements = doc.select("table");
-            // this one is correct
-//            log.info("jobElements" + jobElements.text()); //
 
-// Iterate over each row in the table
+            // 迭代表格中的每一行
             for (Element row : jobElements.select("tr")) {
-//                log.info("row" + row.text());
                 Elements cells = row.select("td");
-                if (cells.size() > 0) {
-                    // Assuming the structure of the table is known and consistent
+                log.info("Processing row: " + row.text());
+
+                if (cells.size() >= 4) { // 确保有足够的列
                     String name = cells.get(0).text();
                     String roles = cells.get(2).text();
                     String link = cells.get(2).select("a").attr("href");
                     String sponsor = cells.get(3).text();
 
-                    // Here you would create your JobPosting object and save it
+                    // 创建JobPosting对象并保存
                     JobPosting jobPosting = new JobPosting();
                     jobPosting.setCompany(name);
                     jobPosting.setTitle(roles);
                     jobPosting.setSponsor(sponsor);
                     jobPosting.setApply_link(link);
+                    jobPosting.setYoe(0);
+                    jobPosting.setLocation("United States");
 
-                    // Save each job posting
                     jobPostingRepository.save(jobPosting);
+                } else {
+                    log.warn("Row skipped due to insufficient columns: " + row.text());
                 }
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error occurred while crawling GitHub job postings", e);
         }
     }
 }

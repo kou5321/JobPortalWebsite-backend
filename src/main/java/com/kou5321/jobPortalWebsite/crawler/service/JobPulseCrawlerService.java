@@ -48,8 +48,6 @@ public class JobPulseCrawlerService {
         int totalPages = totalJobPostingsToFetch / pageSize;
 
         try {
-            log.info("Deleting all existing job postings");
-            jobPostingRepository.deleteAll();
 
             log.info("begin web crawler");
             for (int pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
