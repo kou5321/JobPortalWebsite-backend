@@ -13,7 +13,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collection = "JobCrawler")
-public class JobPosting {
+public class JobPosting implements Serializable {
     @Id
     private String id;
     @TextIndexed

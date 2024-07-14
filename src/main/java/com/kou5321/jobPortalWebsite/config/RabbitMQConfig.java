@@ -9,15 +9,12 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
+    public static final String JOB_QUEUE = "jobQueue";
+
     @Bean
     public Queue jobQueue() {
-        return new Queue("jobQueue", true);
+        return new Queue(JOB_QUEUE, true);
     }
-
-//    @Bean
-//    public Queue testQueue() {
-//        return new Queue("testQueue", true);
-//    }
 
     @Bean
     public Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
@@ -25,9 +22,9 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, Jackson2JsonMessageConverter jackson2JsonMessageConverter) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMessageConverter(jackson2JsonMessageConverter());
+        rabbitTemplate.setMessageConverter(jackson2JsonMessageConverter);
         return rabbitTemplate;
     }
 }

@@ -1,5 +1,6 @@
 package com.kou5321.jobPortalWebsite.crawler.consumer;
 
+import com.kou5321.jobPortalWebsite.config.RabbitMQConfig;
 import com.kou5321.jobPortalWebsite.job.model.JobPosting;
 import com.kou5321.jobPortalWebsite.job.repository.JobPostingRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -15,11 +16,12 @@ public class JobConsumer {
 
     private final JobPostingRepository jobPostingRepository;
 
+    @Autowired
     public JobConsumer(JobPostingRepository jobPostingRepository) {
         this.jobPostingRepository = jobPostingRepository;
     }
 
-    @RabbitListener(queues = "jobQueue")
+    @RabbitListener(queues = RabbitMQConfig.JOB_QUEUE)
     public void handleJob(List<JobPosting> jobPostings) {
         try {
             log.info("Received job postings: {}", jobPostings);
